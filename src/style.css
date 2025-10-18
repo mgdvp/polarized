@@ -1,0 +1,294 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  width: 100%;
+}
+
+.App {
+  padding: 1rem 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+button {
+  border-radius: 20px;
+  border: 1px solid transparent;
+  padding: 0.5em 1em;
+  font-size: 0.9em;
+  font-weight: 500;
+  font-family: inherit;
+  background: #2f2f2f; /* solid, no gradient */
+  border-color: #444;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+button:hover {
+  transform: translateY(-2px);
+  background: #3a3a3a;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+input {
+  border-radius: 8px;
+  border: 1px solid #555;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-family: inherit;
+  background-color: #333;
+  color: rgba(255, 255, 255, 0.87);
+}
+
+/* Make auth inputs and buttons take full width within the form */
+.login-form input,
+.login-form button,
+.login-container > button {
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Remove extra spacing around the 'or' separator */
+.or-separator {
+  margin: 0;
+  padding: 0;
+}
+
+/* Modern link color with better contrast and smooth hover */
+a {
+  color: #8ab4f8; /* soft blue suitable for dark background */
+  text-decoration: none;
+}
+a:hover {
+  color: #b3d1ff;
+  text-decoration: underline;
+}
+a:focus-visible {
+  outline: 2px solid #8ab4f8;
+  outline-offset: 2px;
+}
+
+/* Skeletons */
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: #2a2a2a;
+}
+.skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  animation: shimmer 1.2s infinite;
+  border-radius: inherit; /* ensure rounded skeletons (e.g., avatar) appear round */
+}
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
+.skeleton-line { height: 12px; border-radius: 6px; }
+.skeleton-line.lg { height: 18px; }
+.skeleton-avatar { width: 40px; height: 40px; border-radius: 50%; }
+.skeleton-image { width: 100%; aspect-ratio: 3/4; border-radius: 8px; }
+.skeleton-pill { height: 28px; width: 80px; border-radius: 999px; }
+
+form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+.button-group {
+  display: flex;
+  gap: 1rem;
+}
+
+.button-group button {
+  flex: 1;
+}
+
+.error-message {
+  color: #ff6b6b;
+  margin-top: 1rem;
+}
+
+.info-message {
+  color: #8ab4f8;
+  margin-top: 0.5rem;
+}
+
+/* Create Post */
+.create-post {
+  margin: 1.5rem auto;
+  max-width: 300px;
+}
+
+.create-post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* Make the Post submit button full width like the input */
+.create-post-form button[type="submit"] {
+  width: 100%;
+}
+
+.char-counter {
+  font-size: 0.8rem;
+  color: #aaa;
+  text-align: right;
+  margin-top: -0.5rem;
+}
+
+.upload-actions {
+  display: flex;
+  justify-content: center;
+}
+
+.image-preview {
+  border: 1px solid #333;
+  border-radius: 8px;
+  overflow: hidden;
+}
+.image-preview img {
+  width: 100%;
+  display: block;
+}
+
+/* Feed */
+.feed {
+  margin: 1.5rem auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.post-card {
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  border: 1px solid #333;
+  overflow: hidden;
+}
+.post-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+}
+
+.post-author {
+  text-align: left;
+}
+.post-author-pp {
+  width: 43.2px;
+  height: 43.2px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.post-author .name {
+  font-weight: 600;
+}
+.post-author .time {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+.post-image {
+  width: 100%;
+  display: block;
+  aspect-ratio: 1; /* portrait tiles */
+  object-fit: contain; /* no cropping */
+  background: #000;    /* letterbox/pillarbox space */
+}
+
+.post-image-wrapper {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #000;
+  display: block;
+  overflow: hidden;
+}
+.post-caption {
+  padding: 0.75rem;
+  display: -webkit-box;
+  line-clamp: 2;
+  -webkit-line-clamp: 2; /* show up to two lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.post-footer {
+  padding: 0.75rem;
+  border-top: 1px solid #333;
+}
+.like-button {
+  background: transparent;
+  border: 1px solid #444;
+  color: #eee;
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+}
+.like-button .heart { color: #ff4d4d; }
+.like-button:hover {
+  transform: none;
+  box-shadow: none;
+  background: #2a2a2a;
+}
+.like-button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.feed-loading, .feed-empty {
+  margin: 1rem auto;
+  max-width: 300px;
+  text-align: center;
+  color: #aaa;
+}
+

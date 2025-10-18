@@ -1,0 +1,25 @@
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  height: 30px;
+}
+
+.logo :hover {
+  opacity: 0.8;
+}
+
+.logo img {
+  height: 36px;
+}
