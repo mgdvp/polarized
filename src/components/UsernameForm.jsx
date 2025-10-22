@@ -18,8 +18,8 @@ const UsernameForm = () => {
   }, []);
 
   const handleUsernameChange = (e) => {
-    // Allow only a-z, A-Z, 0-9, dot and underscore; trim spaces; cap at 30 chars
-    setUsername(sanitized);
+    // Do not sanitize or lowercase while typing; validate and lowercase on submit
+    setUsername(e.target.value);
   };
 
   const handleDisplayNameChange = (e) => {
@@ -46,7 +46,8 @@ const UsernameForm = () => {
 
     try {
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('username', '==', username));
+      const usernameLower = username.toLowerCase();
+      const q = query(usersRef, where('username', '==', usernameLower));
       const querySnapshot = await getDocs(q);
 
       if (!querySnapshot.empty) {
@@ -58,11 +59,12 @@ const UsernameForm = () => {
       const user = auth.currentUser;
       if (user) {
         const userDocRef = doc(db, 'users', user.uid);
-        await updateDoc(userDocRef, { username, displayName });
+        const usernameLower = username.toLowerCase();
+        await updateDoc(userDocRef, { username: usernameLower, displayName });
         
         const localUser = JSON.parse(localStorage.getItem('user'));
         if(localUser) {
-          localUser.username = username;
+          localUser.username = usernameLower;
           localUser.displayName = displayName;
           localStorage.setItem('user', JSON.stringify(localUser));
         }

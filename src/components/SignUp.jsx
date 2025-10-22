@@ -40,10 +40,12 @@ const SignUp = () => {
       setLoading(false);
       return;
     }
+    // Lowercase for storage and availability check
+    const usernameLower = username.toLowerCase();
     // Check username availability now (post-validation)
     try {
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('username', '==', username));
+      const q = query(usersRef, where('username', '==', usernameLower));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
         setError('Username is already taken.');
@@ -73,7 +75,7 @@ const SignUp = () => {
         uid: user.uid,
         name: displayName.slice(0, 30),
         displayName: displayName.slice(0, 30),
-        username,
+        username: usernameLower,
         photoURL: `https://api.dicebear.com/9.x/initials/svg?seed=${displayName}`,
       };
 

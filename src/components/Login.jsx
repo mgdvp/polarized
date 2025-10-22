@@ -27,11 +27,11 @@ const Login = () => {
       };
 
       if (!userDocSnap.exists()) {
-        await setDoc(userDocRef, { ...userData, name: user.displayName });
-        localStorage.setItem('user', JSON.stringify({ ...userData, username: null, name: user.displayName }));
+        await setDoc(userDocRef, { ...userData, displayName: user.displayName });
+        localStorage.setItem('user', JSON.stringify({ ...userData, username: null, displayName: user.displayName }));
       } else {
         const existingData = userDocSnap.data();
-        localStorage.setItem('user', JSON.stringify({ ...userData, username: existingData.username || null, name: existingData.name || user.displayName }));
+        localStorage.setItem('user', JSON.stringify({ ...userData, username: existingData.username || null, displayName: existingData.displayName || user.displayName }));
       }
       window.location.reload();
     } catch (error) {
