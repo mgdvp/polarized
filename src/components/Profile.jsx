@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { db, auth, storage } from '../firebase';
-import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import '../styles/Profile.css';
@@ -16,6 +16,9 @@ const Profile = ({ currentUser }) => {
   const [error, setError] = useState(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [nameBusy, setNameBusy] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followBusy, setFollowBusy] = useState(false);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -50,6 +53,25 @@ const Profile = ({ currentUser }) => {
     fetchUserProfile();
   }, [username, currentUser]);
 
+  // Live subscribe to viewed user's profile to get followers/following arrays and counts
+  useEffect(() => {
+    if (!userProfile?.uid) return;
+    const unsub = onSnapshot(doc(db, 'users', userProfile.uid), (snap) => {
+      if (!snap.exists()) return;
+      const data = snap.data();
+      setUserProfile((prev) => ({ ...(prev || {}), ...data }));
+      if (currentUser?.uid) {
+        const followers = Array.isArray(data.followers) ? data.followers : [];
+        setIsFollowing(followers.includes(currentUser.uid));
+      } else {
+        setIsFollowing(false);
+      }
+    }, (err) => {
+      console.warn('Profile live update failed:', err);
+    });
+    return () => unsub();
+  }, [userProfile?.uid, currentUser?.uid]);
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -62,9 +84,17 @@ const Profile = ({ currentUser }) => {
 
   const handleEditName = async () => {
     if (!isCurrentUser || !userProfile?.uid) return;
-    const newName = window.prompt('Enter your display name:', userProfile.name || '')?.trim();
-    if (!newName || newName === userProfile.name) return;
+    const current = userProfile.displayName || userProfile.name || '';
+    const input = window.prompt('Enter your display name (max 30):', current);
+    const newName = (input ?? '').trim();
+    if (!newName) return;
+    if (newName.length > 30) {
+      alert('Display name must be at most 30 characters.');
+      return;
+    }
+    if (newName === current) return;
     try {
+      setNameBusy(true);
       const userRef = doc(db, 'users', userProfile.uid);
       await updateDoc(userRef, { displayName: newName });
       // Update local UI state
@@ -75,12 +105,43 @@ const Profile = ({ currentUser }) => {
     } catch (err) {
       console.error('Failed to update name:', err);
       alert('Could not update name. Please try again later.');
+    } finally {
+      setNameBusy(false);
     }
   };
 
   const triggerPhotoPicker = () => {
     if (!isCurrentUser || uploading) return;
     fileInputRef.current?.click();
+  };
+
+  const toggleFollow = async () => {
+    if (!currentUser?.uid || !userProfile?.uid || isCurrentUser || followBusy) return;
+    setFollowBusy(true);
+    try {
+      const followerUid = currentUser.uid;
+      const followingUid = userProfile.uid;
+      const batch = writeBatch(db);
+      const followerUserRef = doc(db, 'users', followerUid);
+      const followingUserRef = doc(db, 'users', followingUid);
+
+      if (isFollowing) {
+        // Unfollow: remove from both arrays
+        batch.update(followerUserRef, { following: arrayRemove(followingUid) });
+        batch.update(followingUserRef, { followers: arrayRemove(followerUid) });
+      } else {
+        // Follow: add to both arrays
+        batch.update(followerUserRef, { following: arrayUnion(followingUid) });
+        batch.update(followingUserRef, { followers: arrayUnion(followerUid) });
+      }
+      await batch.commit();
+      setIsFollowing(!isFollowing);
+    } catch (err) {
+      console.error('Failed to toggle follow:', err);
+      alert('Could not update follow. Please try again.');
+    } finally {
+      setFollowBusy(false);
+    }
   };
 
   const onPhotoSelected = async (e) => {
@@ -198,12 +259,30 @@ const Profile = ({ currentUser }) => {
                 <div className="identity">
                   <h1>{userProfile.displayName}</h1>
                   <p>@{userProfile.username}</p>
+                  <div className="profile-stats">
+                    <span><strong>{Array.isArray(userProfile.followers) ? userProfile.followers.length : 0}</strong> Followers</span>
+                    <span className="dot">•</span>
+                    <span><strong>{Array.isArray(userProfile.following) ? userProfile.following.length : 0}</strong> Following</span>
+                  </div>
                 </div>
-                {isCurrentUser && (
+                {isCurrentUser ? (
                   <div className="profile-actions">
-                    <button onClick={handleEditName} className="profile-edit-button">Edit name</button>
+                    <button onClick={handleEditName} className="profile-edit-button" disabled={nameBusy}>
+                      {nameBusy ? 'Saving…' : 'Edit name'}
+                    </button>
                     <button onClick={handleLogout} className="profile-logout-button" aria-label="Logout">
                       Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="profile-actions">
+                    <button
+                      onClick={toggleFollow}
+                      className={`profile-follow-button${isFollowing ? ' following' : ''}`}
+                      disabled={followBusy || !currentUser}
+                      aria-pressed={isFollowing}
+                    >
+                      {followBusy ? 'Updating…' : isFollowing ? 'Unfollow' : 'Follow'}
                     </button>
                   </div>
                 )}

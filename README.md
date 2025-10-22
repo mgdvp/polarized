@@ -13,6 +13,11 @@ Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for 
 ---
 
 ## Updates
+- v1.2-beta
+  - Added: Following/followers system
+  - Improved: Form validation
+  - Bug fixes & optimizations
+
 - v1.1-beta
   - Added: Profile photo change support
   - Added: Website favicon

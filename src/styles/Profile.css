@@ -124,3 +124,27 @@ button{
   background: #4c84ff;
   border: 1px solid transparent;
 }
+
+.profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+.profile-stats .dot {
+  opacity: 0.6;
+}
+
+.profile-follow-button {
+  padding: 0.4rem 0.9rem;
+  background: #4c84ff;
+  border: 1px solid transparent;
+}
+
+.profile-follow-button.following {
+  background: transparent;
+  border: 1px solid #444;
+}
