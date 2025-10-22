@@ -47,13 +47,13 @@ function App() {
 
         if (userDocSnap.exists()) {
           const existingData = userDocSnap.data();
-          const fullUserData = { ...userData, username: existingData.username || null, name: existingData.name || currentUser.displayName };
+          const fullUserData = { ...userData, username: existingData.username || null, displayName: existingData.displayName || currentUser.displayName };
           localStorage.setItem('user', JSON.stringify(fullUserData));
           setUser(fullUserData);
           setHasUsername(!!existingData.username);
         } else {
           // This case should ideally not happen if login flow is correct
-          const newUser = { ...userData, username: null, name: currentUser.displayName };
+          const newUser = { ...userData, username: null, displayName: currentUser.displayName };
           localStorage.setItem('user', JSON.stringify(newUser));
           setUser(newUser);
           setHasUsername(false);

@@ -12,6 +12,15 @@ Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for 
 
 ---
 
+## Updates
+- v1.1-beta
+  - Added: Profile photo change support
+  - Added: Website favicon
+  - Bug fixes & optimizations
+
+- v1.0-beta
+  - Initial release
+
 ## ✨ Features
 
 ### 🔐 Authentication

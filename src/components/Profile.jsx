@@ -7,7 +7,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import '../styles/Profile.css';
 import CreatePost from './CreatePost';
 import PostsFeed from './PostsFeed';
-import { cropImageToSquare } from '../utils/image';
+import { cropImageToSquare } from '../utils/imageCompressor';
 
 const Profile = ({ currentUser }) => {
   const { username } = useParams();
@@ -137,7 +137,7 @@ const Profile = ({ currentUser }) => {
   if (loading) {
     return (
       <div className="profile-card">
-        <div className="skeleton skeleton-avatar profile-picture" style={{width: 80, height: 80}} />
+        <div className="skeleton skeleton-avatar profile-picture" style={{width: 94, height: 80}} />
         <div className="profile-info" style={{width: '100%'}}>
           <div className="profile-header">
             <div className="identity" style={{flex: 1}}>

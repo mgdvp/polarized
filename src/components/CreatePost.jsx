@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { db, storage } from '../firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { compressImage } from '../utils/image';
+import { compressImage } from '../utils/imageCompressor';
 
 // Expected data shape in Firestore /posts
 // {
