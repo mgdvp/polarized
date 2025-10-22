@@ -51,12 +51,7 @@ button {
 }
 button:hover {
   transform: translateY(-2px);
-  background: #3a3a3a;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 input {
@@ -67,6 +62,7 @@ input {
   font-family: inherit;
   background-color: #333;
   color: rgba(255, 255, 255, 0.87);
+  width: 100%;
 }
 
 /* Make auth inputs and buttons take full width within the form */
@@ -292,3 +288,8 @@ form {
   color: #aaa;
 }
 
+.google-login-button {
+  background: #4285F4;
+  color: white;
+  border: none;
+}

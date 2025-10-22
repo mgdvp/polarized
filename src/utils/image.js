@@ -8,6 +8,26 @@ export async function compressImage(file, maxWidth = 1080, quality = 0.8) {
   return blob;
 }
 
+// Center-crop to a square and resize to the given size (default 200x200)
+// Returns a Blob of JPEG data
+export async function cropImageToSquare(file, size = 200, quality = 1.0) {
+  const img = await loadImageFromFile(file);
+  const side = Math.min(img.width, img.height);
+  const sx = Math.max(0, Math.floor((img.width - side) / 2));
+  const sy = Math.max(0, Math.floor((img.height - side) / 2));
+
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
+
+  const blob = await canvasToBlob(canvas, 'image/jpeg', quality);
+  return blob;
+}
+
 function loadImageFromFile(file) {
   return new Promise((resolve, reject) => {
     const img = new Image();

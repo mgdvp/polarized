@@ -4,14 +4,14 @@ import { doc, updateDoc, query, collection, where, getDocs, setDoc } from 'fireb
 
 const UsernameForm = () => {
   const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
+  const [displayName, setDisplayName] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const user = auth.currentUser;
     if (user && user.displayName) {
-      setName(user.displayName);
+      setDisplayName(user.displayName);
     }
   }, []);
 
@@ -19,8 +19,8 @@ const UsernameForm = () => {
     setUsername(e.target.value.trim());
   };
 
-  const handleNameChange = (e) => {
-    setName(e.target.value);
+  const handleDisplayNameChange = (e) => {
+    setDisplayName(e.target.value);
   };
 
   const handleUsernameSubmit = async (e) => {
@@ -48,12 +48,12 @@ const UsernameForm = () => {
       const user = auth.currentUser;
       if (user) {
         const userDocRef = doc(db, 'users', user.uid);
-        await updateDoc(userDocRef, { username, name });
+        await updateDoc(userDocRef, { username, displayName });
         
         const localUser = JSON.parse(localStorage.getItem('user'));
         if(localUser) {
           localUser.username = username;
-          localUser.name = name;
+          localUser.displayName = displayName;
           localStorage.setItem('user', JSON.stringify(localUser));
         }
         window.location.reload();

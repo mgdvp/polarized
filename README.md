@@ -1,30 +1,45 @@
-# Polaryzed
+# 🌀 Polarized
+*A minimal social feed built with React + Firebase.*
 
-A minimal social feed built with Vite + React + Firebase (Auth, Firestore, Storage). Users can sign up/login, verify email, edit their profile name, create image posts (auto-compressed), browse a responsive grid feed, and like posts. Skeletons provide a smooth loading UX.
+> Screenshot from v1.0-beta  
+> ![Polarized Screenshot](https://github.com/user-attachments/assets/b259b306-75d2-46b0-9bda-eb49698341d3)
 
-## Features
-### v1.0-beta
-- Auth
-  - Email/password sign up with email verification and username availability check
-  - Google sign-in
-  - Unverified email sessions are blocked until verification
-  - Edit display name, logout from profile
-- Posts
-  - Create post with image + caption (caption limited to 100 chars on client)
-  - Client-side image compression (Canvas), uploaded to Firebase Storage
-  - Posts stored in Firestore under `posts`
-  - Live recent feed (grid, responsive)
-  - Profile page shows only that user’s posts
-  - 3:4 image tiles with letterboxing (no crop) to keep grid uniform
-  - Likes with per-user toggle using subcollection `posts/{postId}/likes/{uid}` and atomic counters
-- UX
-  - Skeleton loaders for profile header and posts grid
-  - Modern dark theme, full-width auth inputs/buttons, improved link color
+---
 
-## Tech stack
-- Vite 7
-- React + react-router-dom
-- Firebase v9+ (modular): Auth, Firestore, Storage
+## 🚀 Overview
+**Polarized** is a lightweight social app where users can share image posts, like content, and manage their profiles — powered by Firebase.  
+Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for speed and simplicity.
+
+---
+
+## ✨ Features
+
+### 🔐 Authentication
+- Email/password sign-up + login  
+- Google sign-in  
+- Email verification (unverified users blocked until verified)  
+- Username availability check  
+- Edit display name & logout  
+
+### 🖼️ Posts
+- Create posts with **image + caption** (max 100 chars)  
+- **Client-side image compression** before upload (Canvas)  
+- Uploads stored in Firebase Storage  
+- Live, responsive grid feed  
+- Profile page showing user’s posts  
+- Like/unlike posts with **atomic counters**
+
+### 💎 UX
+- Smooth **skeleton loaders** for profile and post grids  
+- Responsive design for desktop & mobile  
+
+---
+
+## 🧰 Tech Stack
+- **Frontend:** React + React Router + Vite  
+- **Backend:** Firebase v9 (Auth, Firestore, Storage)
+
+---
 
 ## Quick start
 1) Install dependencies

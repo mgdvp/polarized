@@ -85,7 +85,7 @@ const Login = () => {
         <button type="submit">Sign In</button>
       </form>
       <p className="or-separator">or</p>
-      <button onClick={handleGoogleLogin}>Login with Google</button>
+      <button onClick={handleGoogleLogin} className="google-login-button">Login with Google</button>
       {info && <p className="info-message">{info}</p>}
       {error && <p className="error-message">{error}</p>}
       <p>

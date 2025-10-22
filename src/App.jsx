@@ -93,7 +93,7 @@ function App() {
           user ? (
             hasUsername ? (
               <div>
-                <h2>Welcome, {user.name}!</h2>
+                <h2>Welcome, {user.displayName}!</h2>
                 <PostsFeed currentUser={user} />
               </div>
             ) : (

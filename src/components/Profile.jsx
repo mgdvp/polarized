@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { db, auth } from '../firebase';
+import { db, auth, storage } from '../firebase';
 import { collection, query, where, getDocs, doc, updateDoc } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
+import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
+import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import '../styles/Profile.css';
 import CreatePost from './CreatePost';
 import PostsFeed from './PostsFeed';
+import { cropImageToSquare } from '../utils/image';
 
 const Profile = ({ currentUser }) => {
   const { username } = useParams();
@@ -13,6 +15,8 @@ const Profile = ({ currentUser }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isCurrentUser, setIsCurrentUser] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -62,15 +66,71 @@ const Profile = ({ currentUser }) => {
     if (!newName || newName === userProfile.name) return;
     try {
       const userRef = doc(db, 'users', userProfile.uid);
-      await updateDoc(userRef, { name: newName });
+      await updateDoc(userRef, { displayName: newName });
       // Update local UI state
-      setUserProfile((prev) => ({ ...prev, name: newName }));
+      setUserProfile((prev) => ({ ...prev, displayName: newName }));
       // Update localStorage cached user
       const cached = JSON.parse(localStorage.getItem('user') || '{}');
-      localStorage.setItem('user', JSON.stringify({ ...cached, name: newName }));
+      localStorage.setItem('user', JSON.stringify({ ...cached, displayName: newName }));
     } catch (err) {
       console.error('Failed to update name:', err);
       alert('Could not update name. Please try again later.');
+    }
+  };
+
+  const triggerPhotoPicker = () => {
+    if (!isCurrentUser || uploading) return;
+    fileInputRef.current?.click();
+  };
+
+  const onPhotoSelected = async (e) => {
+    try {
+      const file = e.target.files?.[0];
+      // reset so same file can be reselected later
+      e.target.value = '';
+      if (!file) return;
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file.');
+        return;
+      }
+      if (!userProfile?.uid) return;
+
+      setUploading(true);
+
+  // Crop to 240x240 for avatar at quality 1.0
+  const croppedBlob = await cropImageToSquare(file, 240, 1.0);
+
+  const avatarRef = storageRef(storage, `avatars/${userProfile.uid}.jpg`);
+  await uploadBytes(avatarRef, croppedBlob, { contentType: 'image/jpeg' });
+      const url = await getDownloadURL(avatarRef);
+
+      // Update Firestore profile document
+      const userRef = doc(db, 'users', userProfile.uid);
+      await updateDoc(userRef, { photoURL: url });
+
+      // Update local UI state
+      setUserProfile((prev) => ({ ...prev, photoURL: url }));
+
+      // Update auth profile if this is the current user
+      if (auth.currentUser && isCurrentUser) {
+        try {
+          await updateAuthProfile(auth.currentUser, { photoURL: url });
+        } catch (err) {
+          // Non-fatal; log and proceed
+          console.warn('Auth profile not updated:', err);
+        }
+      }
+
+      // Update cached user in localStorage if present
+      const cached = JSON.parse(localStorage.getItem('user') || '{}');
+      if (cached && typeof cached === 'object') {
+        localStorage.setItem('user', JSON.stringify({ ...cached, photoURL: url }));
+      }
+    } catch (err) {
+      console.error('Failed to update profile photo:', err);
+      alert('Could not update profile photo. Please try again later.');
+    } finally {
+      setUploading(false);
     }
   };
 
@@ -103,11 +163,40 @@ const Profile = ({ currentUser }) => {
       {userProfile ? (
         <>
           <div className="profile-card">
-            <img src={userProfile.photoURL} alt={userProfile.name} className="profile-picture" />
+            <div className={`profile-picture-wrapper${isCurrentUser ? ' editable' : ''}${uploading ? ' uploading' : ''}`}>
+              <img src={userProfile.photoURL} alt={userProfile.displayName} className="profile-picture" />
+              {isCurrentUser && (
+                <>
+                  <button
+                    type="button"
+                    className="pfp-overlay"
+                    onClick={triggerPhotoPicker}
+                    aria-label="Change profile photo"
+                    title="Change profile photo"
+                    disabled={uploading}
+                  >
+                    {uploading ? (
+                      <span className="pfp-uploading">Uploading…</span>
+                    ) : (
+                      <svg className="pfp-edit-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm2.92 2.33H5v-.92l9.06-9.06.92.92L5.92 19.58zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                      </svg>
+                    )}
+                  </button>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="pfp-input"
+                    onChange={onPhotoSelected}
+                  />
+                </>
+              )}
+            </div>
             <div className="profile-info">
               <div className="profile-header">
                 <div className="identity">
-                  <h1>{userProfile.name}</h1>
+                  <h1>{userProfile.displayName}</h1>
                   <p>@{userProfile.username}</p>
                 </div>
                 {isCurrentUser && (
