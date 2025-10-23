@@ -3,6 +3,7 @@ import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Routes, Route, Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import Login from './components/Login';
 import SignUp from './components/SignUp';
@@ -10,12 +11,14 @@ import UsernameForm from './components/UsernameForm';
 import Header from './components/Header';
 import PostsFeed from './components/PostsFeed';
 import Profile from './components/Profile';
+import PostPage from './components/PostPage';
 import './style.css';
 
 function App() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasUsername, setHasUsername] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const localUser = JSON.parse(localStorage.getItem('user'));
@@ -47,7 +50,13 @@ function App() {
 
         if (userDocSnap.exists()) {
           const existingData = userDocSnap.data();
-          const fullUserData = { ...userData, username: existingData.username || null, displayName: existingData.displayName || currentUser.displayName };
+          const fullUserData = {
+            ...userData,
+            // Prefer Firestore profile fields if present
+            username: existingData.username || null,
+            displayName: existingData.displayName || currentUser.displayName,
+            photoURL: existingData.photoURL || userData.photoURL || '',
+          };
           localStorage.setItem('user', JSON.stringify(fullUserData));
           setUser(fullUserData);
           setHasUsername(!!existingData.username);
@@ -87,13 +96,14 @@ function App() {
     <div className="App">
   <Header user={user} />
       <Routes>
+        <Route path="/post/:postId" element={<PostPage currentUser={user} />} />
         <Route path="/profile/:username" element={<Profile currentUser={user} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/" element={
           user ? (
             hasUsername ? (
               <div>
-                <h2>Welcome, {user.displayName}!</h2>
+                <h2>{t('welcome', { name: user.displayName || '' })}</h2>
                 <PostsFeed currentUser={user} />
               </div>
             ) : (

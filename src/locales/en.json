@@ -1,0 +1,29 @@
+{
+  "welcome": "Welcome, {{name}}!",
+  "noPosts": "No posts yet.",
+  "signInToLike": "Sign in to like",
+  "viewAndComment": "View and comment",
+  "comments": "Comments",
+  "signInToComment": "Sign in to add a comment.",
+  "writeAComment": "Write a comment…",
+  "posting": "Posting…",
+  "post": "Post",
+  "noComments": "No comments yet.",
+  "failedLoadComments": "Failed to load comments.",
+  "failedAddComment": "Failed to add comment. Please try again.",
+  "postNotFound": "Post not found.",
+  "failedLoadPost": "Failed to load post.",
+  "time": {
+    "justNow": "just now",
+    "ago": "ago",
+    "units": {
+      "year": { "one": "year", "other": "years", "short": "y" },
+      "month": { "one": "month", "other": "months", "short": "mo" },
+      "week": { "one": "week", "other": "weeks", "short": "w" },
+      "day": { "one": "day", "other": "days", "short": "d" },
+      "hour": { "one": "hour", "other": "hours", "short": "h" },
+      "minute": { "one": "minute", "other": "minutes", "short": "m" },
+      "second": { "one": "second", "other": "seconds", "short": "s" }
+    }
+  }
+}

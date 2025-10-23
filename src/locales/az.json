@@ -1,0 +1,29 @@
+{
+  "welcome": "Xoş gəldiniz, {{name}}!",
+  "noPosts": "Hələ paylaşım yoxdur.",
+  "signInToLike": "Bəyənmək üçün daxil olun",
+  "viewAndComment": "Bax və şərh yaz",
+  "comments": "Şərhlər",
+  "signInToComment": "Şərh yazmaq üçün daxil olun.",
+  "writeAComment": "Şərh yazın…",
+  "posting": "Göndərilir…",
+  "post": "Göndər",
+  "noComments": "Hələ şərh yoxdur.",
+  "failedLoadComments": "Şərhlər yüklənmədi.",
+  "failedAddComment": "Şərh əlavə edilə bilmədi. Zəhmət olmasa yenidən cəhd edin.",
+  "postNotFound": "Paylaşım tapılmadı.",
+  "failedLoadPost": "Paylaşım yüklənmədi.",
+  "time": {
+    "justNow": "indi",
+    "ago": "əvvəl",
+    "units": {
+      "year": { "one": "il", "other": "il", "short": "il" },
+      "month": { "one": "ay", "other": "ay", "short": "ay" },
+      "week": { "one": "həftə", "other": "həftə", "short": "həf" },
+      "day": { "one": "gün", "other": "gün", "short": "g" },
+      "hour": { "one": "saat", "other": "saat", "short": "s" },
+      "minute": { "one": "dəqiqə", "other": "dəqiqə", "short": "dəq" },
+      "second": { "one": "saniyə", "other": "saniyə", "short": "san" }
+    }
+  }
+}

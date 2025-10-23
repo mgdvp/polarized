@@ -4,7 +4,6 @@ import { db, auth, storage } from '../firebase';
 import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import '../styles/Profile.css';
 import CreatePost from './CreatePost';
 import PostsFeed from './PostsFeed';
 import { cropImageToSquare } from '../utils/imageCompressor';
@@ -293,6 +292,8 @@ const Profile = ({ currentUser }) => {
             <CreatePost currentUser={currentUser} />
           )}
           {/* Show all posts by this user below (support uid and legacy username) */}
+          {console.log('filterAuthorUsername:', userProfile.username)}
+          {console.log('filterAuthorUid:', userProfile.uid)}
           <PostsFeed
             currentUser={currentUser}
             filterAuthorUid={userProfile.uid}

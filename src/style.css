@@ -1,11 +1,20 @@
 :root {
+  /* --- NEW COLOR PALETTE VARIABLES (Layering and Accent) --- */
+  --bg-main: #181818; /* Soft deep black/dark gray */
+  --bg-card: #282828; /* Lighter background for elevated cards (posts, panels) */
+  --text-primary: #F0F0F0; /* Near-white for main text */
+  --text-secondary: #A0A0A0; /* Mid-gray for metadata/secondary info */
+  --accent-color: #FFD700; /* Gold/Yellow for branding/links/highlights */
+  --border-color: #444444; /* Darker border for structure */
+
+  /* --- FONT AND BASE STYLES --- */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--text-primary);
+  background-color: var(--bg-main); /* Using new variable */
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,11 +23,11 @@
   -webkit-text-size-adjust: 100%;
 }
 
-*{
+* {
   box-sizing: border-box;
 }
 
-html{
+html {
   scrollbar-gutter: stable;
 }
 
@@ -39,33 +48,62 @@ body {
   text-align: center;
 }
 
+/* --- BUTTON STYLES (Improved Hover/Shadow) --- */
 button {
   border-radius: 20px;
-  border: 1px solid transparent;
+  border: 1px solid var(--border-color); /* Updated border */
   padding: 0.5em 1em;
   font-size: 0.9em;
   font-weight: 500;
   font-family: inherit;
-  background: #2f2f2f; /* solid, no gradient */
-  border-color: #444;
-  color: white;
+  background: var(--bg-card); /* Consistent dark button background */
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); /* Deeper shadow for elevation */
 }
 button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px); /* More subtle lift */
+  background: #3a3a3a; /* Slightly lighter on hover */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2rem;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 15px;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+  height: 30px;
+}
+
+.logo :hover {
+  opacity: 0.8;
+}
+
+.logo img {
+  height: 32px;
+}
+
+
+/* --- INPUT STYLES (Improved Contrast and Background) --- */
 input {
   border-radius: 8px;
-  border: 1px solid #555;
+  border: 1px solid var(--border-color);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-family: inherit;
-  background-color: #333;
-  color: rgba(255, 255, 255, 0.87);
+  background-color: #1f1f1f; /* Slightly lighter than main BG but darker than card BG */
+  color: var(--text-primary);
   width: 100%;
 }
 
@@ -83,17 +121,18 @@ input {
   padding: 0;
 }
 
-/* Modern link color with better contrast and smooth hover */
+/* --- LINK STYLES (Using Accent Color) --- */
 a {
-  color: #8ab4f8; /* soft blue suitable for dark background */
+  color: var(--accent-color); /* Using the accent color */
   text-decoration: none;
+  transition: color 0.2s ease;
 }
 a:hover {
-  color: #b3d1ff;
+  color: #fff8e1; /* Lighter shade of accent on hover */
   text-decoration: underline;
 }
 a:focus-visible {
-  outline: 2px solid #8ab4f8;
+  outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
 
@@ -101,25 +140,43 @@ a:focus-visible {
 .skeleton {
   position: relative;
   overflow: hidden;
-  background: #2a2a2a;
+  background: #333333; /* Slightly darker than card BG for better shimmer contrast */
 }
 .skeleton::after {
   content: "";
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent); /* Stronger shimmer */
   animation: shimmer 1.2s infinite;
-  border-radius: inherit; /* ensure rounded skeletons (e.g., avatar) appear round */
+  border-radius: inherit;
 }
 @keyframes shimmer {
-  100% { transform: translateX(100%); }
+  100% {
+    transform: translateX(100%);
+  }
 }
-.skeleton-line { height: 12px; border-radius: 6px; }
-.skeleton-line.lg { height: 18px; }
-.skeleton-avatar { width: 40px; height: 40px; border-radius: 50%; }
-.skeleton-image { width: 100%; aspect-ratio: 3/4; border-radius: 8px; }
-.skeleton-pill { height: 28px; width: 80px; border-radius: 999px; }
+.skeleton-line {
+  height: 12px;
+  border-radius: 6px;
+}
+.skeleton-line.lg {
+  height: 18px;
+}
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+.skeleton-image {
+  width: 100%;
+  aspect-ratio: 3/4;
+}
+.skeleton-pill {
+  height: 28px;
+  width: 60px;
+  border-radius: 999px;
+}
 
 form {
   display: flex;
@@ -160,7 +217,7 @@ form {
 }
 
 .info-message {
-  color: #8ab4f8;
+  color: var(--accent-color); /* Using accent color */
   margin-top: 0.5rem;
 }
 
@@ -179,11 +236,18 @@ form {
 /* Make the Post submit button full width like the input */
 .create-post-form button[type="submit"] {
   width: 100%;
+  /* Optional: Make primary buttons stand out more */
+  background: var(--accent-color);
+  color: var(--bg-main); /* Dark text on bright button */
+  border-color: var(--accent-color);
+}
+.create-post-form button[type="submit"]:hover {
+  background: #ffec85;
 }
 
 .char-counter {
   font-size: 0.8rem;
-  color: #aaa;
+  color: var(--text-secondary); /* Use secondary text color */
   text-align: right;
   margin-top: -0.5rem;
 }
@@ -194,7 +258,7 @@ form {
 }
 
 .image-preview {
-  border: 1px solid #333;
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   overflow: hidden;
 }
@@ -208,92 +272,481 @@ form {
   margin: 1.5rem auto;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Wider default columns */
+  gap: 1.5rem; /* Increased gap for visual separation */
 }
 
+/* --- POST CARD STYLES (Better Layering and Padding) --- */
 .post-card {
-  background-color: #1a1a1a;
-  border-radius: 15px;
-  border: 1px solid #333;
+  background-color: var(--bg-card); /* Using card background variable */
+  border-radius: 12px; /* Slightly softer corners */
+  border: none; /* Removing border in favor of layered background for separation */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Clear elevation */
   overflow: hidden;
 }
 .post-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.75rem;
+  padding: 1rem; /* Slightly more padding */
 }
 
 .post-author {
   text-align: left;
 }
 .post-author-pp {
-  width: 43.2px;
-  height: 43.2px;
+  width: 42px; /* Standardized avatar size */
+  height: 42px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid var(--accent-color); /* Subtle accent ring on avatar */
 }
 .post-author .name {
   font-weight: 600;
+  color: var(--text-primary);
 }
 .post-author .time {
-  font-size: 0.8rem;
-  color: #aaa;
+  font-size: 0.75rem; /* Slightly smaller for secondary info */
+  color: var(--text-secondary); /* Using secondary text color */
 }
 .post-image {
-  width: 100%;
+  max-width: 100%;
   display: block;
-  aspect-ratio: 1; /* portrait tiles */
-  object-fit: contain; /* no cropping */
-  background: #000;    /* letterbox/pillarbox space */
+  object-fit: contain; /* Changed to contain for a cleaner look, use `contain` if you need the full image */
+  height: 100%;
 }
 
 .post-image-wrapper {
   width: 100%;
-  aspect-ratio: 1;
   background: #000;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   overflow: hidden;
+  width: 100%;
+  height: 320px;
 }
+
+.post-detail .post-image-wrapper{
+  height: 365px;
+}
+
 .post-caption {
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
   display: -webkit-box;
   line-clamp: 2;
-  -webkit-line-clamp: 2; /* show up to two lines */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  text-align: left; /* Aligns caption text to the left */
+  min-height: 3rem;
 }
 .post-footer {
-  padding: 0.75rem;
-  border-top: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem; /* Increased gap */
+  padding: 0.75rem 1rem;
+  border-top: 1px solid #383838; /* Lighter border for better visual separation */
 }
 .like-button {
   background: transparent;
-  border: 1px solid #444;
-  color: #eee;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
   border-radius: 999px;
-  padding: 0.25rem 0.6rem;
+  padding: 0.3rem 0.8rem; /* Adjusted padding */
+  transition: all 0.2s ease;
 }
-.like-button .heart { color: #ff4d4d; }
+.like-button .heart {
+  color: #ff4d4d;
+}
 .like-button:hover {
-  transform: none;
-  box-shadow: none;
-  background: #2a2a2a;
+  background: var(--bg-main); /* Hover effect to main BG */
+  border-color: var(--accent-color); /* Highlight border on hover */
 }
 .like-button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
+  border-color: var(--border-color);
+  background: transparent;
 }
-.feed-loading, .feed-empty {
+.feed-loading,
+.feed-empty {
   margin: 1rem auto;
   max-width: 300px;
   text-align: center;
-  color: #aaa;
+  color: var(--text-secondary);
 }
 
 .google-login-button {
   background: #4285F4;
   color: white;
   border: none;
+}
+
+/* Comment button in feed */
+.comment-button {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+.comment-button:hover {
+  background: var(--bg-main);
+  border-color: var(--accent-color);
+  text-decoration: none;
+  transform: translateY(-1px); /* More subtle lift */
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.post-footer button, .post-footer a {
+  height: 32px;
+  width: 60px;
+}
+
+/* Post detail + comments layout */
+.post-page {
+  display: flex;
+  gap: 2rem; /* Increased gap */
+  max-width: 1200px;
+  margin: 1rem auto;
+  justify-content: center;
+}
+
+.post-detail {
+  min-width: 0;
+}
+
+.post-detail .post-card {
+  min-width: 450px;
+  max-width: 480px; /* Slightly wider detail card */
+  margin: 0 auto;
+}
+
+.post-detail .post-image {
+  object-fit: contain;
+}
+
+.comments-panel {
+  background: var(--bg-card); /* Using card background variable */
+  border-radius: 12px;
+  padding: 1rem;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Elevation for the panel */
+}
+
+.comments-list {
+  flex: 1;
+  overflow: auto;
+}
+
+.comments-list .comment {
+  display: flex;
+  align-items: flex-start; /* Aligns to top of comment for multi-line text */
+  gap: 0.8rem;
+  padding: 0.75rem 0; /* Slightly more vertical padding */
+  border-bottom: 1px solid #383838; /* Lighter divider */
+}
+
+.comments-list .comment:last-child {
+  border-bottom: none;
+}
+
+.comment-pp {
+  width: 36px; /* Slightly larger avatar */
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.comment-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.comment-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.comment-author-line {
+  display: flex;
+  align-items: center; /* Center aligns author name and time */
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.comment-meta .comment-author {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-weight: 600; /* Bold author name */
+  color: var(--text-primary);
+}
+
+.comment-text {
+  white-space: pre-wrap;
+  flex: 1;
+  text-align: left;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.comments-panel form {
+  display: flex;
+  flex-direction: row; /* Changed to column for better input/button structure */
+  gap: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #383838;
+}
+
+.comment-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%; /* Take full width of the panel */
+  max-width: none; /* Override old max-width */
+  gap: 10px;
+}
+
+.comment-input input {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 40px;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background: #1f1f1f;
+  color: var(--text-primary);
+  padding: 0.6rem 1rem;
+  width: auto;
+}
+
+.comment-input button[type="submit"] {
+  background: var(--accent-color); /* Accent color for submit button */
+  color: var(--bg-main);
+  border: 1px solid #444;
+  white-space: nowrap;
+  height: 40px;
+  border-radius: 20px;
+  padding: 0.5rem 1.2rem;
+  box-shadow: none;
+  flex: 0 0 auto;
+  width: auto;
+}
+
+input:focus{
+  outline: 2px solid var(--border-color);
+}
+
+.comment-input button[type="submit"]:hover {
+  transform: none;
+  opacity: 0.9;
+  background: #ffec85;
+}
+
+/* Place error message on a new line under the input+button row */
+.comment-input .error-message {
+  flex: 0 0 100%;
+  margin: 0.25rem 0 0;
+}
+
+.profile-card {
+  background-color: var(--bg-card);
+  border-radius: 15px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  margin: 2rem auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+button{
+  border-radius: 999px;
+}
+
+.profile-picture {
+  border-radius: 50%;
+  width: 88px;
+  height: 88px;
+  object-fit: cover;
+  border: 2px solid var(--accent-color);
+}
+
+.profile-picture-wrapper {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  flex: 0 0 88px;
+}
+
+.profile-picture-wrapper .pfp-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.pfp-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  opacity: 0;
+  transform: scale(0.98);
+  transition: opacity 120ms ease, transform 120ms ease;
+  border: none;
+  cursor: pointer;
+}
+
+.profile-picture-wrapper.editable:hover .pfp-overlay,
+.profile-picture-wrapper.editable:focus-within .pfp-overlay {
+  opacity: 0.6;
+  transform: scale(1);
+}
+
+/* Show overlay at all times while uploading */
+.profile-picture-wrapper.uploading .pfp-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.pfp-edit-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.pfp-uploading {
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.profile-info {
+  text-align: left;
+  width: 100%;
+}
+
+.profile-info h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.profile-info p {
+  margin: 0;
+  color: #aaa;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 100%;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-logout-button {
+  padding: 0.4rem 0.9rem;
+  background: #2a2a2a;
+  border: 1px solid #444;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-left: auto; /* push to right edge */
+  align-items: flex-end;
+}
+
+.profile-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+  font-size: 0.9rem;
+  color: #ddd;
+}
+
+.profile-stats .dot {
+  opacity: 0.6;
+}
+
+.profile-edit-button {
+  padding: 0.4rem 0.9rem;
+  background: var(--accent-color);
+  border: 1px solid var(--border-color);
+  color: var(--bg-main);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.profile-edit-button:hover {
+  background: #ffec85;
+}
+
+.profile-follow-button {
+  padding: 0.4rem 0.9rem;
+  background: var(--accent-color);
+  border: 1px solid transparent;
+}
+
+.profile-follow-button.following {
+  background: transparent;
+  border: 1px solid #444;
+}
+
+
+@media (max-width: 900px) {
+  .post-page {
+    flex-wrap: wrap;
+  }
+  .comments-panel, .post-detail .post-card {
+    width: 100%; /* Full width on smaller screens */
+  }
+}
+
+/* Small helper: comment count badge near emoji */
+.comment-button .comment-count {
+  color: var(--text-secondary);
+  margin-left: 4px;
+  font-size: 0.9rem;
+}
+
+@media only screen and (max-width: 600px) {
+  .App {
+    padding: 1rem;
+  }
+  .logo img {
+    height: 24px;
+  }
+  .feed {
+    gap: 1rem;
+  }
 }

@@ -1,0 +1,29 @@
+{
+  "welcome": "Hoş geldin, {{name}}!",
+  "noPosts": "Henüz gönderi yok.",
+  "signInToLike": "Beğenmek için giriş yap",
+  "viewAndComment": "Görüntüle ve yorum yap",
+  "comments": "Yorumlar",
+  "signInToComment": "Yorum yapmak için giriş yap.",
+  "writeAComment": "Yorum yaz…",
+  "posting": "Gönderiliyor…",
+  "post": "Gönder",
+  "noComments": "Henüz yorum yok.",
+  "failedLoadComments": "Yorumlar yüklenemedi.",
+  "failedAddComment": "Yorum eklenemedi. Lütfen tekrar deneyin.",
+  "postNotFound": "Gönderi bulunamadı.",
+  "failedLoadPost": "Gönderi yüklenemedi.",
+  "time": {
+    "justNow": "az önce",
+    "ago": "önce",
+    "units": {
+      "year": { "one": "yıl", "other": "yıl", "short": "y" },
+      "month": { "one": "ay", "other": "ay", "short": "ay" },
+      "week": { "one": "hafta", "other": "hafta", "short": "h" },
+      "day": { "one": "gün", "other": "gün", "short": "g" },
+      "hour": { "one": "saat", "other": "saat", "short": "s" },
+      "minute": { "one": "dakika", "other": "dakika", "short": "dk" },
+      "second": { "one": "saniye", "other": "saniye", "short": "sn" }
+    }
+  }
+}

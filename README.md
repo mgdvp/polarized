@@ -13,6 +13,20 @@ Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for 
 ---
 
 ## Updates
+- v2.0-beta
+  - Added: Post comments
+  - Added: Individual post view page
+  - Added: Relative time (time ago format)
+  - Added: Turkish and Azerbaijani language support (i18n)
+  - Added: Double-tap to like posts
+  - Improved: UI polish and responsiveness
+  - Improved: Post grid performance
+  - Improved: Like button UX
+  - Removed: Real-time post and comment updates (switched to on-demand fetch)
+  - Fixed: Image stretching on first paint due to aspect-ratio property
+  - Fixed: N+1 problem when fetching posts
+  - Bug fixes & optimizations
+
 - v1.2-beta
   - Added: Following/followers system
   - Improved: Form validation
