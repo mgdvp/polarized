@@ -7,6 +7,7 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage
 import CreatePost from './CreatePost';
 import PostsFeed from './PostsFeed';
 import { cropImageToSquare } from '../utils/imageCompressor';
+import { useTranslation } from 'react-i18next';
 
 const Profile = ({ currentUser }) => {
   const { username } = useParams();
@@ -19,6 +20,7 @@ const Profile = ({ currentUser }) => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [followBusy, setFollowBusy] = useState(false);
   const fileInputRef = useRef(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -30,7 +32,7 @@ const Profile = ({ currentUser }) => {
         const querySnapshot = await getDocs(q);
 
         if (querySnapshot.empty) {
-          setError('User not found.');
+          setError(t('userNotFound'));
         } else {
           const profileData = querySnapshot.docs[0].data();
           setUserProfile(profileData);
@@ -39,10 +41,11 @@ const Profile = ({ currentUser }) => {
             const emailMatch = currentUser.email && profileData.email && currentUser.email.toLowerCase() === profileData.email.toLowerCase();
             const usernameMatch = currentUser.username && profileData.username && currentUser.username.toLowerCase() === profileData.username.toLowerCase();
             setIsCurrentUser(Boolean(uidMatch || emailMatch || usernameMatch));
+            window.scrollTo(0, 0);
           }
         }
       } catch (err) {
-        setError('Failed to fetch user profile.');
+        setError(t('failedToFetchProfile'));
         console.error(err);
       } finally {
         setLoading(false);
@@ -84,11 +87,11 @@ const Profile = ({ currentUser }) => {
   const handleEditName = async () => {
     if (!isCurrentUser || !userProfile?.uid) return;
     const current = userProfile.displayName || userProfile.name || '';
-    const input = window.prompt('Enter your display name (max 30):', current);
+    const input = window.prompt(t('enterDisplayName'), current);
     const newName = (input ?? '').trim();
     if (!newName) return;
     if (newName.length > 30) {
-      alert('Display name must be at most 30 characters.');
+      alert(t('displayNameTooLong'));
       return;
     }
     if (newName === current) return;
@@ -103,7 +106,7 @@ const Profile = ({ currentUser }) => {
       localStorage.setItem('user', JSON.stringify({ ...cached, displayName: newName }));
     } catch (err) {
       console.error('Failed to update name:', err);
-      alert('Could not update name. Please try again later.');
+      alert(t('couldNotUpdateName'));
     } finally {
       setNameBusy(false);
     }
@@ -137,7 +140,7 @@ const Profile = ({ currentUser }) => {
       setIsFollowing(!isFollowing);
     } catch (err) {
       console.error('Failed to toggle follow:', err);
-      alert('Could not update follow. Please try again.');
+      alert(t('couldNotUpdateFollow'));
     } finally {
       setFollowBusy(false);
     }
@@ -150,7 +153,7 @@ const Profile = ({ currentUser }) => {
       e.target.value = '';
       if (!file) return;
       if (!file.type.startsWith('image/')) {
-        alert('Please select an image file.');
+        alert(t('selectImageFile'));
         return;
       }
       if (!userProfile?.uid) return;
@@ -161,7 +164,7 @@ const Profile = ({ currentUser }) => {
   const croppedBlob = await cropImageToSquare(file, 240, 1.0);
 
   const avatarRef = storageRef(storage, `avatars/${userProfile.uid}.jpg`);
-  await uploadBytes(avatarRef, croppedBlob, { contentType: 'image/jpeg' });
+  await uploadBytes(avatarRef, croppedBlob, { contentType: 'image/webp' });
       const url = await getDownloadURL(avatarRef);
 
       // Update Firestore profile document
@@ -188,7 +191,7 @@ const Profile = ({ currentUser }) => {
       }
     } catch (err) {
       console.error('Failed to update profile photo:', err);
-      alert('Could not update profile photo. Please try again later.');
+      alert(t('couldNotUpdatePhoto'));
     } finally {
       setUploading(false);
     }
@@ -197,7 +200,7 @@ const Profile = ({ currentUser }) => {
   if (loading) {
     return (
       <div className="profile-card">
-        <div className="skeleton skeleton-avatar profile-picture" style={{width: 94, height: 80}} />
+        <div className="skeleton-avatar profile-picture" />
         <div className="profile-info" style={{width: '100%'}}>
           <div className="profile-header">
             <div className="identity" style={{flex: 1}}>
@@ -222,7 +225,7 @@ const Profile = ({ currentUser }) => {
     <div>
       {userProfile ? (
         <>
-          <div className="profile-card">
+          <div className="profile-card" id="profile-card">
             <div className={`profile-picture-wrapper${isCurrentUser ? ' editable' : ''}${uploading ? ' uploading' : ''}`}>
               <img src={userProfile.photoURL} alt={userProfile.displayName} className="profile-picture" />
               {isCurrentUser && (
@@ -231,12 +234,12 @@ const Profile = ({ currentUser }) => {
                     type="button"
                     className="pfp-overlay"
                     onClick={triggerPhotoPicker}
-                    aria-label="Change profile photo"
-                    title="Change profile photo"
+                    aria-label={t('changeProfilePhoto')}
+                    title={t('changeProfilePhoto')}
                     disabled={uploading}
                   >
                     {uploading ? (
-                      <span className="pfp-uploading">Uploading…</span>
+                      <span className="pfp-uploading">{t('uploading')}</span>
                     ) : (
                       <svg className="pfp-edit-icon" viewBox="0 0 24 24" aria-hidden="true">
                         <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm2.92 2.33H5v-.92l9.06-9.06.92.92L5.92 19.58zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
@@ -259,31 +262,33 @@ const Profile = ({ currentUser }) => {
                   <h1>{userProfile.displayName}</h1>
                   <p>@{userProfile.username}</p>
                   <div className="profile-stats">
-                    <span><strong>{Array.isArray(userProfile.followers) ? userProfile.followers.length : 0}</strong> Followers</span>
+                    <span><strong>{Array.isArray(userProfile.followers) ? userProfile.followers.length : 0}</strong> {t('followers')}</span>
                     <span className="dot">•</span>
-                    <span><strong>{Array.isArray(userProfile.following) ? userProfile.following.length : 0}</strong> Following</span>
+                    <span><strong>{Array.isArray(userProfile.following) ? userProfile.following.length : 0}</strong> {t('following')}</span>
                   </div>
                 </div>
                 {isCurrentUser ? (
                   <div className="profile-actions">
-                    <button onClick={handleEditName} className="profile-edit-button" disabled={nameBusy}>
-                      {nameBusy ? 'Saving…' : 'Edit name'}
+                    <button onClick={handleEditName} className="btn-primary" disabled={nameBusy}>
+                      {nameBusy ? t('saving') : t('editName')}
                     </button>
-                    <button onClick={handleLogout} className="profile-logout-button" aria-label="Logout">
-                      Logout
+                    <button onClick={handleLogout} aria-label={t('logout')}>
+                      {t('logout')}
                     </button>
                   </div>
                 ) : (
+                  currentUser && (
                   <div className="profile-actions">
                     <button
                       onClick={toggleFollow}
-                      className={`profile-follow-button${isFollowing ? ' following' : ''}`}
+                      className={`btn-${isFollowing ? 'following' : 'primary'}`}
                       disabled={followBusy || !currentUser}
                       aria-pressed={isFollowing}
                     >
-                      {followBusy ? 'Updating…' : isFollowing ? 'Unfollow' : 'Follow'}
+                      {followBusy ? t('updating') : isFollowing ? t('unfollow') : t('follow')}
                     </button>
                   </div>
+                  )
                 )}
               </div>
             </div>
@@ -291,9 +296,6 @@ const Profile = ({ currentUser }) => {
           {isCurrentUser && (
             <CreatePost currentUser={currentUser} />
           )}
-          {/* Show all posts by this user below (support uid and legacy username) */}
-          {console.log('filterAuthorUsername:', userProfile.username)}
-          {console.log('filterAuthorUid:', userProfile.uid)}
           <PostsFeed
             currentUser={currentUser}
             filterAuthorUid={userProfile.uid}
@@ -301,7 +303,7 @@ const Profile = ({ currentUser }) => {
           />
         </>
       ) : (
-        <p>User not found.</p>
+        <p>{t('userNotFound')}</p>
       )}
     </div>
   );

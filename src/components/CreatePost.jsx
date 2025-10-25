@@ -49,11 +49,11 @@ const CreatePost = ({ currentUser }) => {
     const myToken = ++uploadTokenRef.current;
     try {
       setUploading(true);
-      const blob = await compressImage(f, 1080, 0.8);
-      const ext = 'jpg';
+      const blob = await compressImage(f, 1080, 0.85);
+      const ext = 'webp';
       const storagePath = `posts/${currentUser.uid}/${Date.now()}.${ext}`;
       const storageRef = ref(storage, storagePath);
-      await uploadBytes(storageRef, blob, { contentType: 'image/jpeg' });
+      await uploadBytes(storageRef, blob, { contentType: 'image/webp' });
       const url = await getDownloadURL(storageRef);
       // Drop result if a new upload started since
       if (uploadTokenRef.current === myToken) {
@@ -146,7 +146,7 @@ const CreatePost = ({ currentUser }) => {
           </>
         )}
         {imageUrl && !uploading && (
-          <button type="submit" disabled={submitting}>
+          <button type="submit" disabled={submitting} className="btn-primary" style={{width: '100%'}}>
             {submitting ? 'Posting…' : 'Post'}
           </button>
         )}

@@ -1,15 +1,15 @@
 // Simple image compression using Canvas
-// Returns a Blob of compressed JPEG
-export async function compressImage(file, maxWidth = 1080, quality = 0.8) {
+// Returns a Blob of compressed WEBP
+export async function compressImage(file, maxWidth = 1080, quality = 0.85) {
   const img = await loadImageFromFile(file);
   const { canvas, ctx } = createCanvasForImage(img, maxWidth);
   ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-  const blob = await canvasToBlob(canvas, 'image/jpeg', quality);
+  const blob = await canvasToBlob(canvas, 'image/webp', quality);
   return blob;
 }
 
 // Center-crop to a square and resize to the given size (default 200x200)
-// Returns a Blob of JPEG data
+// Returns a Blob of WEBP data
 export async function cropImageToSquare(file, size = 200, quality = 1.0) {
   const img = await loadImageFromFile(file);
   const side = Math.min(img.width, img.height);
@@ -24,7 +24,7 @@ export async function cropImageToSquare(file, size = 200, quality = 1.0) {
   ctx.imageSmoothingQuality = 'high';
   ctx.drawImage(img, sx, sy, side, side, 0, 0, size, size);
 
-  const blob = await canvasToBlob(canvas, 'image/jpeg', quality);
+  const blob = await canvasToBlob(canvas, 'image/webp', quality);
   return blob;
 }
 

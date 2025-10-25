@@ -4,12 +4,14 @@ import { auth, db } from '../firebase';
 import { GoogleAuthProvider, signInWithPopup, signInWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { getAuthErrorMessage } from '../utils/firebaseErrors';
+import { useTranslation } from 'react-i18next';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
+  const { t } = useTranslation();
 
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
@@ -50,10 +52,10 @@ const Login = () => {
       if (user.providerData.some(p => p.providerId === 'password') && !user.emailVerified) {
         try {
           await sendEmailVerification(user);
-          setInfo(`We sent a verification link to ${user.email}. Please verify your email, then sign in.`);
+          setInfo(t('verificationEmailSent', { email: user.email }));
         } catch (e) {
           console.error('Error sending verification email:', e);
-          setError('Could not send verification email. Please try again later.');
+          setError(t('couldNotSendVerification'));
         }
         await signOut(auth);
         return;
@@ -68,28 +70,31 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>{t('login')}</h2>
       <form onSubmit={handleEmailSignIn} className="login-form">
         <input
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder={t('email')}
+          required
         />
         <input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
+          placeholder={t('password')}
+          required
+          minLength={6}
         />
-        <button type="submit">Sign In</button>
+        <button type="submit">{t('signIn')}</button>
       </form>
-      <p className="or-separator">or</p>
-      <button onClick={handleGoogleLogin} className="google-login-button">Login with Google</button>
+      <p className="or-separator">{t('or')}</p>
+      <button onClick={handleGoogleLogin} className="google-login-button">{t('loginWithGoogle')}</button>
       {info && <p className="info-message">{info}</p>}
       {error && <p className="error-message">{error}</p>}
       <p>
-        Don't have an account? <Link to="/signup">Create new account</Link>
+        {t('dontHaveAccount')} <Link to="/signup">{t('createNewAccount')}</Link>
       </p>
     </div>
   );

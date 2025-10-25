@@ -1,20 +1,18 @@
 :root {
-  /* --- NEW COLOR PALETTE VARIABLES (Layering and Accent) --- */
-  --bg-main: #181818; /* Soft deep black/dark gray */
-  --bg-card: #282828; /* Lighter background for elevated cards (posts, panels) */
-  --text-primary: #F0F0F0; /* Near-white for main text */
-  --text-secondary: #A0A0A0; /* Mid-gray for metadata/secondary info */
-  --accent-color: #FFD700; /* Gold/Yellow for branding/links/highlights */
-  --border-color: #444444; /* Darker border for structure */
+  --bg-main: #181818;
+  --bg-card: #282828;
+  --text-primary: #F0F0F0;
+  --text-secondary: #A0A0A0;
+  --accent-color: #FFD700;
+  --border-color: #444444;
 
-  /* --- FONT AND BASE STYLES --- */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: dark;
   color: var(--text-primary);
-  background-color: var(--bg-main); /* Using new variable */
+  background-color: var(--bg-main);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -48,23 +46,22 @@ body {
   text-align: center;
 }
 
-/* --- BUTTON STYLES (Improved Hover/Shadow) --- */
 button {
   border-radius: 20px;
-  border: 1px solid var(--border-color); /* Updated border */
+  border: 1px solid var(--border-color);
   padding: 0.5em 1em;
   font-size: 0.9em;
   font-weight: 500;
   font-family: inherit;
-  background: var(--bg-card); /* Consistent dark button background */
+  background: var(--bg-card);
   color: var(--text-primary);
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4); /* Deeper shadow for elevation */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 button:hover {
-  transform: translateY(-1px); /* More subtle lift */
-  background: #3a3a3a; /* Slightly lighter on hover */
+  transform: translateY(-1px);
+  background: #3a3a3a;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
@@ -94,20 +91,17 @@ button:hover {
   height: 32px;
 }
 
-
-/* --- INPUT STYLES (Improved Contrast and Background) --- */
 input {
   border-radius: 8px;
   border: 1px solid var(--border-color);
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-family: inherit;
-  background-color: #1f1f1f; /* Slightly lighter than main BG but darker than card BG */
+  background-color: #1f1f1f;
   color: var(--text-primary);
   width: 100%;
 }
 
-/* Make auth inputs and buttons take full width within the form */
 .login-form input,
 .login-form button,
 .login-container > button {
@@ -115,20 +109,18 @@ input {
   max-width: 300px;
 }
 
-/* Remove extra spacing around the 'or' separator */
 .or-separator {
   margin: 0;
   padding: 0;
 }
 
-/* --- LINK STYLES (Using Accent Color) --- */
 a {
-  color: var(--accent-color); /* Using the accent color */
+  color: var(--accent-color);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 a:hover {
-  color: #fff8e1; /* Lighter shade of accent on hover */
+  color: #fff8e1;
   text-decoration: underline;
 }
 a:focus-visible {
@@ -136,18 +128,17 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Skeletons */
 .skeleton {
   position: relative;
   overflow: hidden;
-  background: #333333; /* Slightly darker than card BG for better shimmer contrast */
+  background: #333333;
 }
 .skeleton::after {
   content: "";
   position: absolute;
   inset: 0;
   transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent); /* Stronger shimmer */
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
   animation: shimmer 1.2s infinite;
   border-radius: inherit;
 }
@@ -168,6 +159,13 @@ a:focus-visible {
   height: 40px;
   border-radius: 50%;
 }
+
+.profile-picture-wrapper .skeleton-avatar {
+  width: 88px;
+  height: auto;
+  aspect-ratio: 1/1;
+}
+
 .skeleton-image {
   width: 100%;
   aspect-ratio: 3/4;
@@ -217,11 +215,10 @@ form {
 }
 
 .info-message {
-  color: var(--accent-color); /* Using accent color */
+  color: var(--accent-color);
   margin-top: 0.5rem;
 }
 
-/* Create Post */
 .create-post {
   margin: 1.5rem auto;
   max-width: 300px;
@@ -233,21 +230,9 @@ form {
   gap: 0.75rem;
 }
 
-/* Make the Post submit button full width like the input */
-.create-post-form button[type="submit"] {
-  width: 100%;
-  /* Optional: Make primary buttons stand out more */
-  background: var(--accent-color);
-  color: var(--bg-main); /* Dark text on bright button */
-  border-color: var(--accent-color);
-}
-.create-post-form button[type="submit"]:hover {
-  background: #ffec85;
-}
-
 .char-counter {
   font-size: 0.8rem;
-  color: var(--text-secondary); /* Use secondary text color */
+  color: var(--text-secondary);
   text-align: right;
   margin-top: -0.5rem;
 }
@@ -267,57 +252,53 @@ form {
   display: block;
 }
 
-/* Feed */
 .feed {
   margin: 1.5rem auto;
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Wider default columns */
-  gap: 1.5rem; /* Increased gap for visual separation */
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
-/* --- POST CARD STYLES (Better Layering and Padding) --- */
 .post-card {
-  background-color: var(--bg-card); /* Using card background variable */
-  border-radius: 12px; /* Slightly softer corners */
-  border: none; /* Removing border in favor of layered background for separation */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Clear elevation */
+  background-color: var(--bg-card);
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   overflow: hidden;
 }
 .post-header {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 1rem; /* Slightly more padding */
+  padding: 1rem;
 }
 
 .post-author {
   text-align: left;
 }
 .post-author-pp {
-  width: 42px; /* Standardized avatar size */
+  width: 42px;
   height: 42px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid var(--accent-color); /* Subtle accent ring on avatar */
+  border: 2px solid var(--accent-color);
 }
 .post-author .name {
   font-weight: 600;
   color: var(--text-primary);
 }
 .post-author .time {
-  font-size: 0.75rem; /* Slightly smaller for secondary info */
-  color: var(--text-secondary); /* Using secondary text color */
+  font-size: 0.75rem;
+  color: var(--text-secondary);
 }
 .post-image {
   max-width: 100%;
   display: block;
-  object-fit: contain; /* Changed to contain for a cleaner look, use `contain` if you need the full image */
+  object-fit: contain;
   height: 100%;
 }
 
 .post-image-wrapper {
-  width: 100%;
   background: #000;
   display: flex;
   justify-content: center;
@@ -327,7 +308,7 @@ form {
   height: 320px;
 }
 
-.post-detail .post-image-wrapper{
+.post-detail .post-image-wrapper {
   height: 365px;
 }
 
@@ -339,38 +320,37 @@ form {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  text-align: left; /* Aligns caption text to the left */
+  text-align: left;
   min-height: 3rem;
 }
 .post-footer {
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: 0.75rem; /* Increased gap */
+  gap: 0.75rem;
   padding: 0.75rem 1rem;
-  border-top: 1px solid #383838; /* Lighter border for better visual separation */
+  border-top: 1px solid #383838;
 }
 .like-button {
   background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   border-radius: 999px;
-  padding: 0.3rem 0.8rem; /* Adjusted padding */
+  padding: 0.3rem 0.8rem;
   transition: all 0.2s ease;
 }
 .like-button .heart {
   color: #ff4d4d;
 }
 .like-button:hover {
-  background: var(--bg-main); /* Hover effect to main BG */
-  border-color: var(--accent-color); /* Highlight border on hover */
+  background: var(--bg-main);
+  border-color: var(--accent-color);
 }
 .like-button[disabled] {
   opacity: 0.6;
   cursor: not-allowed;
-  border-color: var(--border-color);
-  background: transparent;
 }
+
 .feed-loading,
 .feed-empty {
   margin: 1rem auto;
@@ -385,7 +365,6 @@ form {
   border: none;
 }
 
-/* Comment button in feed */
 .comment-button {
   background: transparent;
   border: 1px solid var(--border-color);
@@ -401,19 +380,19 @@ form {
   background: var(--bg-main);
   border-color: var(--accent-color);
   text-decoration: none;
-  transform: translateY(-1px); /* More subtle lift */
+  transform: translateY(-1px);
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 }
 
-.post-footer button, .post-footer a {
+.post-footer button,
+.post-footer a {
   height: 32px;
-  width: 60px;
+  min-width: 60px;
 }
 
-/* Post detail + comments layout */
 .post-page {
   display: flex;
-  gap: 2rem; /* Increased gap */
+  gap: 2rem;
   max-width: 1200px;
   margin: 1rem auto;
   justify-content: center;
@@ -425,7 +404,7 @@ form {
 
 .post-detail .post-card {
   min-width: 450px;
-  max-width: 480px; /* Slightly wider detail card */
+  max-width: 480px;
   margin: 0 auto;
 }
 
@@ -434,14 +413,14 @@ form {
 }
 
 .comments-panel {
-  background: var(--bg-card); /* Using card background variable */
+  background: var(--bg-card);
   border-radius: 12px;
   padding: 1rem;
   min-height: 200px;
   display: flex;
   flex-direction: column;
   width: 400px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Elevation for the panel */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .comments-list {
@@ -451,10 +430,10 @@ form {
 
 .comments-list .comment {
   display: flex;
-  align-items: flex-start; /* Aligns to top of comment for multi-line text */
+  align-items: flex-start;
   gap: 0.8rem;
-  padding: 0.75rem 0; /* Slightly more vertical padding */
-  border-bottom: 1px solid #383838; /* Lighter divider */
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #383838;
 }
 
 .comments-list .comment:last-child {
@@ -462,7 +441,7 @@ form {
 }
 
 .comment-pp {
-  width: 36px; /* Slightly larger avatar */
+  width: 36px;
   height: 36px;
   border-radius: 50%;
   object-fit: cover;
@@ -483,18 +462,17 @@ form {
 
 .comment-author-line {
   display: flex;
-  align-items: center; /* Center aligns author name and time */
+  align-items: center;
   gap: 0.5rem;
   width: 100%;
 }
 
 .comment-meta .comment-author {
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   flex-shrink: 0;
-  font-weight: 600; /* Bold author name */
+  font-weight: 600;
   color: var(--text-primary);
 }
 
@@ -508,7 +486,7 @@ form {
 
 .comments-panel form {
   display: flex;
-  flex-direction: row; /* Changed to column for better input/button structure */
+  flex-direction: row;
   gap: 0.5rem;
   padding-top: 0.5rem;
   border-top: 1px solid #383838;
@@ -518,47 +496,40 @@ form {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 100%; /* Take full width of the panel */
-  max-width: none; /* Override old max-width */
+  width: 100%;
   gap: 10px;
 }
 
 .comment-input input {
   flex: 1 1 auto;
-  min-width: 0;
   height: 40px;
   border-radius: 20px;
   border: 1px solid var(--border-color);
   background: #1f1f1f;
   color: var(--text-primary);
   padding: 0.6rem 1rem;
-  width: auto;
 }
 
 .comment-input button[type="submit"] {
-  background: var(--accent-color); /* Accent color for submit button */
+  background: var(--accent-color);
   color: var(--bg-main);
   border: 1px solid #444;
   white-space: nowrap;
   height: 40px;
   border-radius: 20px;
   padding: 0.5rem 1.2rem;
-  box-shadow: none;
   flex: 0 0 auto;
-  width: auto;
 }
 
-input:focus{
+input:focus {
   outline: 2px solid var(--border-color);
 }
 
 .comment-input button[type="submit"]:hover {
-  transform: none;
   opacity: 0.9;
   background: #ffec85;
 }
 
-/* Place error message on a new line under the input+button row */
 .comment-input .error-message {
   flex: 0 0 100%;
   margin: 0.25rem 0 0;
@@ -576,7 +547,7 @@ input:focus{
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
-button{
+button {
   border-radius: 999px;
 }
 
@@ -586,6 +557,7 @@ button{
   height: 88px;
   object-fit: cover;
   border: 2px solid var(--accent-color);
+  aspect-ratio: 1/1;
 }
 
 .profile-picture-wrapper {
@@ -618,7 +590,6 @@ button{
   opacity: 0;
   transform: scale(0.98);
   transition: opacity 120ms ease, transform 120ms ease;
-  border: none;
   cursor: pointer;
 }
 
@@ -628,7 +599,6 @@ button{
   transform: scale(1);
 }
 
-/* Show overlay at all times while uploading */
 .profile-picture-wrapper.uploading .pfp-overlay {
   opacity: 1;
   transform: scale(1);
@@ -672,17 +642,11 @@ button{
   flex-direction: column;
 }
 
-.profile-logout-button {
-  padding: 0.4rem 0.9rem;
-  background: #2a2a2a;
-  border: 1px solid #444;
-}
-
 .profile-actions {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  margin-left: auto; /* push to right edge */
+  margin-left: auto;
   align-items: flex-end;
 }
 
@@ -711,28 +675,11 @@ button{
   background: #ffec85;
 }
 
-.profile-follow-button {
-  padding: 0.4rem 0.9rem;
-  background: var(--accent-color);
-  border: 1px solid transparent;
-}
-
 .profile-follow-button.following {
   background: transparent;
   border: 1px solid #444;
 }
 
-
-@media (max-width: 900px) {
-  .post-page {
-    flex-wrap: wrap;
-  }
-  .comments-panel, .post-detail .post-card {
-    width: 100%; /* Full width on smaller screens */
-  }
-}
-
-/* Small helper: comment count badge near emoji */
 .comment-button .comment-count {
   color: var(--text-secondary);
   margin-left: 4px;
@@ -747,6 +694,41 @@ button{
     height: 24px;
   }
   .feed {
+    gap: 1rem;
+  }
+}
+
+.btn-primary {
+  background: var(--accent-color);
+  color: var(--bg-main);
+  border: 1px solid var(--accent-color);
+}
+.btn-primary:hover {
+  background: #ffec85;
+}
+
+a{
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+
+
+
+@media only screen and (max-width: 900px) {
+  .post-page {
+    flex-wrap: wrap;
+  }
+  .comments-panel,
+  .post-detail {
+    width: 100%;
+  }
+  .post-detail .post-card {
+    width: 100%;
+    min-width: 100%;
+  }
+  .profile-card{
+    padding: 1rem;
     gap: 1rem;
   }
 }

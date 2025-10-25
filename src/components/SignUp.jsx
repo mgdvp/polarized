@@ -4,6 +4,7 @@ import { auth, db } from '../firebase';
 import { createUserWithEmailAndPassword, sendEmailVerification, signOut } from 'firebase/auth';
 import { doc, setDoc, getDocs, collection, query, where } from 'firebase/firestore';
 import { getAuthErrorMessage } from '../utils/firebaseErrors';
+import { useTranslation } from 'react-i18next';
 
 const SignUp = () => {
   const [displayName, setDisplayName] = useState('');
@@ -15,6 +16,7 @@ const SignUp = () => {
   const [usernameError, setUsernameError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // Username: letters, numbers, dot and underscore. No consecutive dots, no trailing dot. Max 30.
   const USERNAME_REGEX = /^(?!.*\.{2})(?!.*\.$)[a-zA-Z0-9._]{1,30}$/;
@@ -31,12 +33,12 @@ const SignUp = () => {
 
     setLoading(true);
     if (!displayName.trim().length || displayName.length > 30) {
-      setError('Display name is required and must be at most 30 characters.');
+      setError(t('displayNameRequired'));
       setLoading(false);
       return;
     }
     if (!USERNAME_REGEX.test(username)) {
-      setError('Username can use letters, numbers, . and _. Max 30 chars, no consecutive dots or trailing dot.');
+      setError(t('usernameRules'));
       setLoading(false);
       return;
     }
@@ -48,23 +50,23 @@ const SignUp = () => {
       const q = query(usersRef, where('username', '==', usernameLower));
       const querySnapshot = await getDocs(q);
       if (!querySnapshot.empty) {
-        setError('Username is already taken.');
+        setError(t('usernameTaken'));
         setLoading(false);
         return;
       }
     } catch (e1) {
       console.error('Error checking username availability:', e1);
-      setError('Could not check username availability. Please try again.');
+      setError(t('usernameCheckFailed'));
       setLoading(false);
       return;
     }
     if (password.length < 6) {
-      setError('Password should be at least 6 characters.');
+      setError(t('passwordMin'));
       setLoading(false);
       return;
     }
 
-    setInfo('Creating your account...');
+    setInfo(t('creatingYourAccount'));
 
     try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
@@ -82,7 +84,7 @@ const SignUp = () => {
       await setDoc(userDocRef, userData);
       try {
         await sendEmailVerification(user);
-        setInfo(`We sent a verification link to ${email}. Verify your email, then sign in.`);
+        setInfo(t('verificationEmailSent', { email }));
       } catch (e) {
         console.error('Error sending verification email:', e);
         setError(getAuthErrorMessage(e));
@@ -99,13 +101,13 @@ const SignUp = () => {
 
   return (
     <div className="login-container">
-      <h2>Create Account</h2>
+      <h2>{t('createAccount')}</h2>
       <form onSubmit={handleSignUp} className="login-form">
         <input
           type="text"
           value={displayName}
           onChange={(e) => setDisplayName(e.target.value.slice(0, 30))}
-          placeholder="Full Name"
+          placeholder={t('fullName')}
           maxLength={30}
           disabled={loading}
           required
@@ -114,7 +116,7 @@ const SignUp = () => {
           type="text"
           value={username}
           onChange={handleUsernameChange}
-          placeholder="Username"
+          placeholder={t('username')}
           maxLength={30}
           disabled={loading}
           required
@@ -123,7 +125,7 @@ const SignUp = () => {
           type="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder={t('email')}
           disabled={loading}
           required
         />
@@ -131,16 +133,16 @@ const SignUp = () => {
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
+          placeholder={t('password')}
           disabled={loading}
           required
         />
-        <button type="submit" disabled={loading}>{loading ? 'Creating…' : 'Sign Up'}</button>
+        <button type="submit" disabled={loading}>{loading ? t('creating') : t('signUp')}</button>
       </form>
       {info && <p className="info-message">{info}</p>}
       {error && <p className="error-message">{error}</p>}
       <p>
-        Already have an account? <Link to="/">Sign In</Link>
+        {t('alreadyHaveAccount')} <Link to="/">{t('signIn')}</Link>
       </p>
     </div>
   );

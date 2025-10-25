@@ -1,41 +1,44 @@
-// Common Firebase Auth error handler with user-friendly messages
+// Common Firebase Auth error handler with localized messages
 // Reference: https://firebase.google.com/docs/auth/admin/errors
+import i18n from '../i18n';
 
-const AUTH_ERROR_MESSAGES = {
+// Map Firebase error codes to i18n key suffixes under "auth.*"
+const AUTH_ERROR_KEYS = {
   // Sign-in errors
-  'auth/invalid-email': 'Please enter a valid email address.',
-  'auth/missing-email': 'Please enter your email address.',
-  'auth/missing-password': 'Please enter your password.',
-  'auth/wrong-password': 'Incorrect password. Please try again.',
-  'auth/user-not-found': "We couldn't find an account with that email.",
-  'auth/user-disabled': 'This account has been disabled. Contact support if this is an error.',
-  'auth/too-many-requests': 'Too many attempts. Please wait a bit and try again.',
-  'auth/network-request-failed': 'Network error. Please check your connection and try again.',
+  'auth/invalid-email': 'invalidEmail',
+  'auth/missing-email': 'missingEmail',
+  'auth/missing-password': 'missingPassword',
+  'auth/wrong-password': 'wrongPassword',
+  'auth/user-not-found': 'userNotFound',
+  'auth/user-disabled': 'userDisabled',
+  'auth/too-many-requests': 'tooManyRequests',
+  'auth/network-request-failed': 'networkRequestFailed',
 
   // Sign-up errors
-  'auth/email-already-in-use': 'There is already an account with this email.',
-  'auth/weak-password': 'Password is too weak. Use at least 6 characters.',
+  'auth/email-already-in-use': 'emailAlreadyInUse',
+  'auth/weak-password': 'weakPassword',
 
   // Popup and provider errors
-  'auth/popup-closed-by-user': 'Sign-in was canceled before it was completed.',
-  'auth/cancelled-popup-request': 'Another sign-in popup was already open.',
-  'auth/popup-blocked': 'Popup was blocked by your browser. Allow popups and try again.',
+  'auth/popup-closed-by-user': 'popupClosedByUser',
+  'auth/cancelled-popup-request': 'cancelledPopupRequest',
+  'auth/popup-blocked': 'popupBlocked',
 
   // Credential and account existence
-  'auth/account-exists-with-different-credential': 'An account already exists with the same email but different sign-in method.',
-  'auth/credential-already-in-use': 'Those credentials are already used by another account.',
+  'auth/account-exists-with-different-credential': 'accountExistsWithDifferentCredential',
+  'auth/credential-already-in-use': 'credentialAlreadyInUse',
 
   // Recaptcha or timeouts
-  'auth/timeout': 'The request timed out. Please try again.',
+  'auth/timeout': 'timeout',
 };
 
 export function getAuthErrorMessage(error) {
-  if (!error) return 'An unknown error occurred.';
+  if (!error) return i18n.t('auth.unknown');
   // Firebase v9+ typically exposes error.code
   const code = typeof error === 'string' ? error : error.code || error.message || '';
   if (typeof code === 'string') {
     const normalized = code.startsWith('auth/') ? code : `auth/${code}`;
-    if (AUTH_ERROR_MESSAGES[normalized]) return AUTH_ERROR_MESSAGES[normalized];
+    const keySuffix = AUTH_ERROR_KEYS[normalized];
+    if (keySuffix) return i18n.t(`auth.${keySuffix}`);
   }
-  return 'Something went wrong. Please try again.';
+  return i18n.t('auth.generic');
 }

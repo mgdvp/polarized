@@ -13,6 +13,9 @@ Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for 
 ---
 
 ## Updates
+
+Further updates and changelogs can be found in the [changelog.md](changelog.md) file.
+
 - v2.0-beta
   - Added: Post comments
   - Added: Individual post view page
@@ -44,22 +47,29 @@ Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for 
 
 ### 🔐 Authentication
 - Email/password sign-up + login  
-- Google sign-in  
-- Email verification (unverified users blocked until verified)  
-- Username availability check  
-- Edit display name & logout  
+- Google sign-in
+- Email verification 
+- Username availability check
+- Form validation
 
 ### 🖼️ Posts
-- Create posts with **image + caption** (max 100 chars)  
-- **Client-side image compression** before upload (Canvas)  
-- Uploads stored in Firebase Storage  
-- Live, responsive grid feed  
-- Profile page showing user’s posts  
-- Like/unlike posts with **atomic counters**
+- Create posts with **image + caption** 
+- Image compression before upload
+- Uploads stored in Firebase Storage
+- Live, responsive grid feed
+- User-specific posts
+- Like/unlike posts (with optimistic UI updates)
+- Comments on posts (v2.0-beta)
+
+### 👤 User Profiles
+- View and edit profile information
+- Display user’s posts and activity
+- Follow/unfollow other users
 
 ### 💎 UX
 - Smooth **skeleton loaders** for profile and post grids  
 - Responsive design for desktop & mobile  
+- Optimistic UI updates for likes and follows
 
 ---
 
