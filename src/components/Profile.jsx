@@ -269,7 +269,7 @@ const Profile = ({ currentUser }) => {
                 </div>
                 {isCurrentUser ? (
                   <div className="profile-actions">
-                    <button onClick={handleEditName} className="btn-primary" disabled={nameBusy}>
+                    <button onClick={handleEditName} disabled={nameBusy}>
                       {nameBusy ? t('saving') : t('editName')}
                     </button>
                     <button onClick={handleLogout} aria-label={t('logout')}>

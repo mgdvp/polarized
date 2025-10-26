@@ -1,3 +1,5 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
+
 :root {
   --bg-main: #181818;
   --bg-card: #282828;
@@ -88,7 +90,7 @@ button:hover {
 }
 
 .logo img {
-  height: 32px;
+  height: 24px;
 }
 
 input {
@@ -663,14 +665,6 @@ button {
   opacity: 0.6;
 }
 
-.profile-edit-button {
-  padding: 0.4rem 0.9rem;
-  background: var(--accent-color);
-  border: 1px solid var(--border-color);
-  color: var(--bg-main);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-
 .profile-edit-button:hover {
   background: #ffec85;
 }
@@ -690,11 +684,31 @@ button {
   .App {
     padding: 1rem;
   }
-  .logo img {
-    height: 24px;
-  }
   .feed {
     gap: 1rem;
+  }
+  .profile-card {
+    flex-wrap: wrap;
+    gap: 1rem; /* Satırlar arasına boşluk ekle */
+    padding: 1rem;
+  }
+  .profile-info,
+  .profile-header {
+    display: contents;
+  }
+  .identity {
+    flex: 1; /* Kalan alanı doldur */
+    min-width: 150px; /* Çok fazla küçülüp bozulmasın */
+  }
+  .profile-actions {
+    align-items: stretch; /* Butonlar tam genişliğe yayılsın */
+    width: 100%;
+    margin-top: 0.5rem;
+    flex-direction: row;
+  }
+  .profile-actions button {
+    width: 100%;
+    box-sizing: border-box; /* padding'in genişliği etkilememesi için */
   }
 }
 
@@ -726,9 +740,5 @@ a{
   .post-detail .post-card {
     width: 100%;
     min-width: 100%;
-  }
-  .profile-card{
-    padding: 1rem;
-    gap: 1rem;
   }
 }

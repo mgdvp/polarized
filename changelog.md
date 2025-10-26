@@ -1,6 +1,6 @@
 ## Changelog
 
-### v2.1.0-beta (2025-10-24)
+### v2.1.0-beta (2025-10-25)
 - Added: Translation completed
 - Improved: Image compression quality (from 0.8 to 0.85, jpeg to webp)
 - Improved: Form validation
