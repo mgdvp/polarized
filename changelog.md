@@ -1,7 +1,7 @@
 ## Changelog
 
 ### v2.2.0-beta (2025-10-27)
-- Added: Chat feature (one-on-one messaging)
+- Added: Chat feature (one-on-one messaging) (with RTDB)
 - Improved: Optimized message rendering and scroll handling on mobile.
 - Improved: Chat UI and responsiveness
 - Fixed: Various minor bugs
