@@ -9,6 +9,7 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import UsernameForm from './components/UsernameForm';
 import Header from './components/Header';
+import Chat from './components/Chat';
 import PostsFeed from './components/PostsFeed';
 import Profile from './components/Profile';
 import PostPage from './components/PostPage';
@@ -78,26 +79,13 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      await signOut(auth);
-      localStorage.removeItem('user');
-      window.location.reload();
-    } catch (error) {
-      console.error("Error signing out:", error);
-    }
-  };
-
-  if (loading) {
-    // return <div>Loading...</div>;
-  }
-
   return (
     <div className="App">
-  <Header user={user} />
+      <Header user={user} />
       <Routes>
         <Route path="/post/:postId" element={<PostPage currentUser={user} />} />
         <Route path="/profile/:username" element={<Profile currentUser={user} />} />
+        <Route path="/messages" element={<Chat currentUser={user} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/" element={
           user ? (

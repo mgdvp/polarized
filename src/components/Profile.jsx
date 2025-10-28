@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { db, auth, storage } from '../firebase';
+import { rtdb } from '../firebase';
+import { ref as dbRef, get as rtdbGet, update as rtdbUpdate, serverTimestamp } from 'firebase/database';
 import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
@@ -21,6 +23,7 @@ const Profile = ({ currentUser }) => {
   const [followBusy, setFollowBusy] = useState(false);
   const fileInputRef = useRef(null);
   const { t } = useTranslation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -146,6 +149,61 @@ const Profile = ({ currentUser }) => {
     }
   };
 
+  const startChat = async () => {
+    try {
+      if (!currentUser?.uid || !userProfile?.uid || isCurrentUser) return;
+      const uid1 = currentUser.uid;
+      const uid2 = userProfile.uid;
+      const [a, b] = uid1 < uid2 ? [uid1, uid2] : [uid2, uid1];
+      const chatId = `${a}_${b}`;
+
+      // Check if chat exists
+      const chatSnap = await rtdbGet(dbRef(rtdb, `chats/${chatId}`));
+
+      const updates = {};
+      if (!chatSnap.exists()) {
+        updates[`/chats/${chatId}`] = {
+          members: { [uid1]: true, [uid2]: true },
+          createdAt: serverTimestamp(),
+          updatedAt: serverTimestamp(),
+          lastMessage: null,
+        };
+      }
+      // Store lightweight other user info for lists
+      const otherFor1 = {
+        uid: uid2,
+        username: userProfile.username || '',
+        displayName: userProfile.displayName || '',
+        photoURL: userProfile.photoURL || '',
+      };
+      const otherFor2 = {
+        uid: uid1,
+        username: currentUser.username || '',
+        displayName: currentUser.displayName || '',
+        photoURL: currentUser.photoURL || '',
+      };
+
+      updates[`/userChats/${uid1}/${uid2}`] = {
+        chatId,
+        otherUid: uid2,
+        other: otherFor1,
+        updatedAt: serverTimestamp(),
+      };
+      updates[`/userChats/${uid2}/${uid1}`] = {
+        chatId,
+        otherUid: uid1,
+        other: otherFor2,
+        updatedAt: serverTimestamp(),
+      };
+
+      await rtdbUpdate(dbRef(rtdb), updates);
+      navigate(`/messages?chatId=${encodeURIComponent(chatId)}`);
+    } catch (err) {
+      console.error('Failed to start chat:', err);
+      // Non-fatal: silently fail or alert minimal
+    }
+  };
+
   const onPhotoSelected = async (e) => {
     try {
       const file = e.target.files?.[0];
@@ -160,11 +218,11 @@ const Profile = ({ currentUser }) => {
 
       setUploading(true);
 
-  // Crop to 240x240 for avatar at quality 1.0
-  const croppedBlob = await cropImageToSquare(file, 240, 1.0);
+      // Crop to 240x240 for avatar at quality 1.0
+      const croppedBlob = await cropImageToSquare(file, 240, 1.0);
 
-  const avatarRef = storageRef(storage, `avatars/${userProfile.uid}.jpg`);
-  await uploadBytes(avatarRef, croppedBlob, { contentType: 'image/webp' });
+      const avatarRef = storageRef(storage, `avatars/${userProfile.uid}.webp`);
+      await uploadBytes(avatarRef, croppedBlob, { contentType: 'image/webp' });
       const url = await getDownloadURL(avatarRef);
 
       // Update Firestore profile document
@@ -286,6 +344,12 @@ const Profile = ({ currentUser }) => {
                       aria-pressed={isFollowing}
                     >
                       {followBusy ? t('updating') : isFollowing ? t('unfollow') : t('follow')}
+                    </button>
+                    <button
+                      onClick={startChat}
+                      className="btn-secondary"
+                    >
+                      {t('sendMessage')}
                     </button>
                   </div>
                   )

@@ -11,6 +11,11 @@ const Header = ({ user }) => {
       <Link to="/" className="logo"><img src="/logo.png" alt="Logo" /></Link>
       
       <div className="header-user-info">
+        {isLoggedIn && (
+          <Link to="/messages" style={{ marginRight: 12 }}>
+            {t('messages')}
+          </Link>
+        )}
         <Link 
           to={isLoggedIn ? `/profile/${user.username}` : "/"}
         >

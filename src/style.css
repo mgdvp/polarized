@@ -62,9 +62,9 @@ button {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 button:hover {
-  transform: translateY(-1px);
   background: #3a3a3a;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  opacity: 0.9;
 }
 
 .app-header {
@@ -680,37 +680,6 @@ button {
   font-size: 0.9rem;
 }
 
-@media only screen and (max-width: 600px) {
-  .App {
-    padding: 1rem;
-  }
-  .feed {
-    gap: 1rem;
-  }
-  .profile-card {
-    flex-wrap: wrap;
-    gap: 1rem; /* Satırlar arasına boşluk ekle */
-    padding: 1rem;
-  }
-  .profile-info,
-  .profile-header {
-    display: contents;
-  }
-  .identity {
-    flex: 1; /* Kalan alanı doldur */
-    min-width: 150px; /* Çok fazla küçülüp bozulmasın */
-  }
-  .profile-actions {
-    align-items: stretch; /* Butonlar tam genişliğe yayılsın */
-    width: 100%;
-    margin-top: 0.5rem;
-    flex-direction: row;
-  }
-  .profile-actions button {
-    width: 100%;
-    box-sizing: border-box; /* padding'in genişliği etkilememesi için */
-  }
-}
 
 .btn-primary {
   background: var(--accent-color);
@@ -725,6 +694,52 @@ a{
   -webkit-tap-highlight-color: transparent;
 }
 
+.chat-msg-wrapper{
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.chat-msg{
+  max-width: 70%;
+  background: #333;
+  padding: 8px 12px;
+  border-radius: 12px;
+}
+
+.chat-messages::-webkit-scrollbar {
+  background-color: transparent;
+  width: 8px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.chat-messages::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.chat-info-mobile{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color);
+  justify-content: flex-start;
+}
+
+.chat-list-user{
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  padding: 12px;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 6px;
+}
 
 
 
@@ -740,5 +755,53 @@ a{
   .post-detail .post-card {
     width: 100%;
     min-width: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .App {
+    padding: 1rem;
+  }
+  .feed {
+    gap: 1rem;
+  }
+  .profile-card {
+    flex-wrap: wrap;
+    gap: 1rem; 
+    padding: 1rem;
+  }
+  .profile-info,
+  .profile-header {
+    display: contents;
+  }
+  .identity {
+    flex: 1; 
+    min-width: 150px; 
+  }
+  .profile-actions {
+    align-items: stretch;
+    width: 100%;
+    margin-top: 0.5rem;
+    flex-direction: row;
+  }
+  .profile-actions button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .chat-page{
+    flex-direction: column;
+  }
+  .chat-list, .chat-window{
+    width: 100% !important;
+    height: calc(100vh - 200px) !important;
+  }
+  .hidden-mobile{
+    display: none !important;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .chat-info-mobile{
+    display: none !important;
   }
 }

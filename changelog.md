@@ -1,5 +1,12 @@
 ## Changelog
 
+### v2.2.0-beta (2025-10-27)
+- Added: Chat feature (one-on-one messaging)
+- Improved: Optimized message rendering and scroll handling on mobile.
+- Improved: Chat UI and responsiveness
+- Fixed: Various minor bugs
+- UI & UX improvements
+
 ### v2.1.0-beta (2025-10-25)
 - Added: Translation completed
 - Improved: Image compression quality (from 0.8 to 0.85, jpeg to webp)
