@@ -16,7 +16,7 @@ Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for 
 
 Further updates and changelogs can be found in the [changelog.md](changelog.md) file.
 
-- v2.0-beta
+- v2.0
   - Added: Post comments
   - Added: Individual post view page
   - Added: Relative time (time ago format)
@@ -30,17 +30,17 @@ Further updates and changelogs can be found in the [changelog.md](changelog.md) 
   - Fixed: N+1 problem when fetching posts
   - Bug fixes & optimizations
 
-- v1.2-beta
+- v1.2
   - Added: Following/followers system
   - Improved: Form validation
   - Bug fixes & optimizations
 
-- v1.1-beta
+- v1.1
   - Added: Profile photo change support
   - Added: Website favicon
   - Bug fixes & optimizations
 
-- v1.0-beta
+- v1.0
   - Initial release
 
 ## ✨ Features
