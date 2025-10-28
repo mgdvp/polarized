@@ -1,5 +1,9 @@
 ## Changelog
 
+### v2.2.1-beta (2025-10-28)
+- Improved: Code refactoring over chat components
+- Fixed: Like/comment functionality not working due to firebase rules misconfiguration
+
 ### v2.2.0-beta (2025-10-28)
 - Added: Chat feature (one-on-one messaging) (with RTDB)
 - Improved: Optimized message rendering and scroll handling on mobile.

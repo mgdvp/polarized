@@ -741,6 +741,14 @@ a{
   margin-bottom: 6px;
 }
 
+.chat-list-last-message{
+  color: var(--text-secondary);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 
 
 

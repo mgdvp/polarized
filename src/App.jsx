@@ -9,7 +9,7 @@ import Login from './components/Login';
 import SignUp from './components/SignUp';
 import UsernameForm from './components/UsernameForm';
 import Header from './components/Header';
-import Chat from './components/Chat';
+import ChatPage from './components/chat/ChatPage';
 import PostsFeed from './components/PostsFeed';
 import Profile from './components/Profile';
 import PostPage from './components/PostPage';
@@ -85,7 +85,7 @@ function App() {
       <Routes>
         <Route path="/post/:postId" element={<PostPage currentUser={user} />} />
         <Route path="/profile/:username" element={<Profile currentUser={user} />} />
-        <Route path="/messages" element={<Chat currentUser={user} />} />
+  <Route path="/messages" element={<ChatPage currentUser={user} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/" element={
           user ? (

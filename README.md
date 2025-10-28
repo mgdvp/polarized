@@ -2,7 +2,7 @@
 *A minimal social feed built with React + Firebase.*
 
 > Screenshot from v1.0-beta  
-> ![Polarized Screenshot](https://github.com/user-attachments/assets/b259b306-75d2-46b0-9bda-eb49698341d3)
+> <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a3a2b7d4-e63a-4535-9f3b-082802923e36" />
 
 ---
 
