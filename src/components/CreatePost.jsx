@@ -3,6 +3,7 @@ import { db, storage } from '../firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { compressImage } from '../utils/imageCompressor';
+import { useTranslation } from 'react-i18next';
 
 // Expected data shape in Firestore /posts
 // {
@@ -25,6 +26,8 @@ const CreatePost = ({ currentUser }) => {
   const uploadTokenRef = useRef(0);
   const fileInputRef = useRef(null);
 
+  const { t } = useTranslation();
+
   const triggerFilePicker = () => {
     if (fileInputRef.current) fileInputRef.current.click();
   };
@@ -41,7 +44,7 @@ const CreatePost = ({ currentUser }) => {
     setPreviewUrl(localUrl);
 
     if (!currentUser || !currentUser.uid) {
-      setError('You must be signed in to post.');
+      setError(t('mustSignInToPost'));
       return;
     }
 
@@ -62,7 +65,7 @@ const CreatePost = ({ currentUser }) => {
     } catch (err) {
       console.error('Image upload failed:', err);
       if (uploadTokenRef.current === myToken) {
-        setError('Image upload failed. Please try another image.');
+        setError(t('imageUploadFailed'));
         setImageUrl('');
       }
     } finally {
@@ -74,11 +77,11 @@ const CreatePost = ({ currentUser }) => {
     e.preventDefault();
     setError('');
     if (!currentUser || !currentUser.username) {
-      setError('You must be signed in to post.');
+      setError(t('mustSignInToPost'));
       return;
     }
     if (!imageUrl) {
-      setError('Please wait until the image finishes uploading.');
+      setError(t('waitImageUpload'));
       return;
     }
 
@@ -97,14 +100,10 @@ const CreatePost = ({ currentUser }) => {
 
       await addDoc(collection(db, 'posts'), post);
 
-      // Reset form
-      setFile(null);
-      setCaption('');
-      setPreviewUrl('');
-      setImageUrl('');
+      location.reload();
     } catch (err) {
       console.error('Failed to create post:', err);
-      setError('Failed to create post. Please try again.');
+      setError(t('failedCreatePost'));
     } finally {
       setSubmitting(false);
     }
@@ -112,7 +111,7 @@ const CreatePost = ({ currentUser }) => {
 
   return (
     <div className="create-post">
-      <h3>Create a post</h3>
+      <h3>{t('createPostTitle')}</h3>
       <form onSubmit={handleSubmit} className="create-post-form">
         {/* Hidden native file input: triggered by custom button to avoid showing filename */}
         <input
@@ -124,20 +123,20 @@ const CreatePost = ({ currentUser }) => {
         />
         <div className="upload-actions">
           <button type="button" onClick={triggerFilePicker}>
-            {previewUrl ? 'Change image' : 'Upload image'}
+            {previewUrl ? t('changeImage') : t('uploadImage')}
           </button>
         </div>
         {previewUrl && (
           <div className="image-preview">
-            <img src={previewUrl} alt="Selected preview" />
-            {uploading && <p className="info-message">Uploading image…</p>}
+            <img src={previewUrl} alt={t('selectedPreviewAlt')} />
+            {uploading && <p className="info-message">{t('uploadingImage')}</p>}
           </div>
         )}
         {imageUrl && !uploading && (
           <>
             <input
               type="text"
-              placeholder="Write a caption (optional)"
+              placeholder={t('addACaption')}
               value={caption}
               onChange={(e) => setCaption(e.target.value)}
               maxLength={100}
@@ -147,7 +146,7 @@ const CreatePost = ({ currentUser }) => {
         )}
         {imageUrl && !uploading && (
           <button type="submit" disabled={submitting} className="btn-primary" style={{width: '100%'}}>
-            {submitting ? 'Posting…' : 'Post'}
+            {submitting ? t('posting') : t('post')}
           </button>
         )}
         {error && <p className="error-message">{error}</p>}

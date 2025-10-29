@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { rtdb, db } from '../../firebase';
-import { ref, onValue, off, update, push, serverTimestamp } from 'firebase/database';
+import { ref, onValue, off, update, push, serverTimestamp, set } from 'firebase/database';
 import { doc, getDoc } from 'firebase/firestore';
 
 import ChatList from './ChatList';
@@ -28,7 +28,10 @@ const ChatPage = ({ currentUser }) => {
     if (!uid) return;
     setLoadingChats(true);
     const userChatsRef = ref(rtdb, `userChats/${uid}`);
+    // console.log('Current user UID:', currentUser?.uid);
+    // console.log('Setting up listener for userChats/', uid);
     const unsub = onValue(userChatsRef, async (snap) => {
+      // console.log('Triggered, exists:', snap.exists());
       const val = snap.val() || {};
       const arr = await Promise.all(
         Object.entries(val).map(async ([otherUid, data]) => {
@@ -56,7 +59,7 @@ const ChatPage = ({ currentUser }) => {
     });
     return () => off(userChatsRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [uid, selectedChatId]);
+  }, [uid]);
 
   const getOtherUidFromChatId = (chatId) => {
     if (!chatId || !uid) return null;
@@ -69,22 +72,36 @@ const ChatPage = ({ currentUser }) => {
 
   const sendMessage = async (text) => {
     if (!text || !uid || !selectedChatId) return;
+    console.log(selectedChatId)
     const otherUid = getOtherUidFromChatId(selectedChatId);
 
+
     const newMsgRef = push(ref(rtdb, `messages/${selectedChatId}`));
-    const message = { senderId: uid, text, createdAt: Date.now() };
-    const updates = {};
-    updates[`/messages/${selectedChatId}/${newMsgRef.key}`] = message;
-    updates[`/chats/${selectedChatId}/lastMessage`] = message;
-    updates[`/chats/${selectedChatId}/updatedAt`] = serverTimestamp();
+    const message = { senderId: uid, text, createdAt: serverTimestamp() };
+
+    // 1️⃣ Mesajı /messages/... path’ine yaz
+    await set(newMsgRef, message); // senderId check geçiyor
+
+    // 2️⃣ /chats/... path’ini ayrı update et
+    await update(ref(rtdb, `chats/${selectedChatId}`), {
+      lastMessage: message,
+      updatedAt: serverTimestamp()
+    });
+
+    // 3️⃣ /userChats/... path’ini ayrı update et
     if (otherUid) {
-      updates[`/userChats/${uid}/${otherUid}/lastMessage`] = message;
-      updates[`/userChats/${uid}/${otherUid}/updatedAt`] = serverTimestamp();
-      updates[`/userChats/${otherUid}/${uid}/lastMessage`] = message;
-      updates[`/userChats/${otherUid}/${uid}/updatedAt`] = serverTimestamp();
+      await update(ref(rtdb, `userChats/${uid}/${otherUid}`), {
+        lastMessage: message,
+        updatedAt: serverTimestamp()
+      });
+
+      await update(ref(rtdb, `userChats/${otherUid}/${uid}`), {
+        lastMessage: message,
+        updatedAt: serverTimestamp()
+      });
     }
-    await update(ref(rtdb), updates);
   };
+
 
   return (
     <div className="chat-page" style={{ display: 'flex', height: 'calc(100vh - 112px)', gap: 16 }}>

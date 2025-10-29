@@ -704,6 +704,7 @@ a{
   background: #333;
   padding: 8px 12px;
   border-radius: 12px;
+  text-align: left;
 }
 
 .chat-messages::-webkit-scrollbar {
@@ -768,6 +769,9 @@ a{
 
 @media only screen and (max-width: 600px) {
   .App {
+    padding: 1rem;
+  }
+  .app-header {
     padding: 1rem;
   }
   .feed {

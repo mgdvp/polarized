@@ -1,5 +1,11 @@
 ## Changelog
 
+### v2.2.2-beta (2025-10-29)
+- Fixed: Chat input focus issue on mobile (keyboard closing after sending message)
+- Improved: Security rules for chat messages
+- UI & UX improvements
+- Minor bug fixes & optimizations
+
 ### v2.2.1-beta (2025-10-28)
 - Improved: Code refactoring over chat components
 - Fixed: Like/comment functionality not working due to firebase rules misconfiguration
