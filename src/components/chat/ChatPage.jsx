@@ -53,11 +53,11 @@ const ChatPage = ({ currentUser }) => {
       setConversations(arr);
       setLoadingChats(false);
 
-      if (!selectedChatId && arr.length > 0 && typeof window !== 'undefined' && window.innerWidth > 600) {
-        setSelectedChatId(arr[0].chatId);
-        setSelectedChatOtherUserName(arr[0].other?.displayName || arr[0].other?.username || `@${arr[0].otherUid}`);
-        setSelectedChatOther(arr[0].other || { uid: arr[0].otherUid });
-      }
+      // if (!selectedChatId && arr.length > 0 && typeof window !== 'undefined' && window.innerWidth > 600) {
+      //   setSelectedChatId(arr[0].chatId);
+      //   setSelectedChatOtherUserName(arr[0].other?.displayName || arr[0].other?.username || `@${arr[0].otherUid}`);
+      //   setSelectedChatOther(arr[0].other || { uid: arr[0].otherUid });
+      // }
     });
     return () => off(userChatsRef);
     // eslint-disable-next-line react-hooks/exhaustive-deps

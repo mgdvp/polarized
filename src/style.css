@@ -715,6 +715,7 @@ a, button{
   padding: 8px 12px;
   border-radius: 12px;
   text-align: left;
+  word-wrap: break-word;
 }
 
 .chat-msg.typing{
@@ -849,7 +850,8 @@ a, button{
 }
 
 .chat-list-content{
-  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .chat-list-name{
@@ -907,7 +909,42 @@ a, button{
 }
 /* removed header unread dot */
 
+.chat-msg-time{
+  font-size: 10px;
+  color: var(--text-secondary);
+  align-self: flex-end;
+  margin-left: 4px;
+  opacity: 0;
+  transition: opacity 120ms ease;
+  white-space: nowrap;
+  margin-bottom: 2px;
+}
+.chat-msg-wrapper:hover .chat-msg-time{
+  opacity: 1;
+}
+.chat-msg-time.left{
+  order: -1; /* render before the message */
+  margin-right: 8px;
+  margin-left: 0;
+}
+.chat-msg-time.right{
+  margin-left: 8px;
+}
 
+.chat-date-separator{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 12px 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  background: rgba(255,255,255,0.02);
+  padding: 6px 12px;
+  border-radius: 999px;
+  width: max-content;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 
 @media only screen and (max-width: 900px) {
@@ -974,6 +1011,15 @@ a, button{
   }
   #msg-send-button{
     display: none !important;
+  }
+  
+  /* Trying to fix height bug on mobile */
+
+  #root{
+    height: 100dvh;
+  }
+  .App, .chat-page{
+    height: 100%;
   }
 }
 

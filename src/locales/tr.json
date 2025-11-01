@@ -101,6 +101,8 @@
       "hour": { "one": "saat", "other": "saat", "short": "s" },
       "minute": { "one": "dakika", "other": "dakika", "short": "dk" },
       "second": { "one": "saniye", "other": "saniye", "short": "sn" }
-    }
+    },
+    "yesterday": "dün",
+    "today": "bugün"
   }
 }

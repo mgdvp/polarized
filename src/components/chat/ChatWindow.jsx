@@ -18,8 +18,6 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
     return parts[0] === uid ? parts[1] : parts[0];
   }, [chatId, uid]);
 
-  // Seen indicator removed: no tracking of other's lastMessage
-
   useEffect(() => {
     if (!chatId) {
       if (detach.current) detach.current();
@@ -55,16 +53,6 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
     }
   }, [messages, otherTyping]);
 
-  // // Also scroll when loading completes
-  // useEffect(() => {
-  //   if (!loaded) return;
-  //   if (messagesRef.current) {
-  //     messagesRef.current.scrollTop = messagesRef.current.scrollHeight;
-  //   }
-  // }, [loaded]);
-
-  // Seen indicator removed: no writes to lastMessage.seen
-
   // typing indicator from other user: read from my userChats entry under other/typing
   useEffect(() => {
     if (!uid || !otherUid) return;
@@ -88,8 +76,6 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
       window.removeEventListener('popstate', handlePopState);
     };
   }, [onBack]);
-
-  // Seen indicator removed: no calculation for last my message seen
 
   // If no chat selected
   if (!chatId) {
@@ -117,20 +103,60 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
         ) : (
           messages.map((m, i) => {
             const fromMe = m.senderId === uid;
-            const showAvatar = !fromMe && (i === 0 || (messages[i-1] && messages[i-1].senderId === uid));
+            const prev = messages[i - 1];
+            const prevTs = prev?.createdAt ? Number(prev.createdAt) : 0;
+            const curTs = m.createdAt ? Number(m.createdAt) : 0;
+            const GAP = 60 * 60 * 1000; // 1 hour
+            const showAvatar = !fromMe && (i === 0 || (messages[i - 1] && messages[i - 1].senderId === uid));
+            const showDateSeparator = i === 0 || (curTs - prevTs >= GAP);
+
+            const formatDate = (ts) => {
+              if (!ts) return '';
+              try {
+                const d = new Date(Number(ts));
+                const today = new Date();
+                const y = new Date();
+                y.setDate(today.getDate() - 1);
+
+                const sameDay = (a, b) => a.toDateString() === b.toDateString();
+                if (sameDay(d, today)) return t('time.today');
+                if (sameDay(d, y)) return t('time.yesterday');
+                return new Date(Number(ts)).toLocaleDateString();
+              } catch { return ''; }
+            };
+            const formatTime = (ts) => {
+              if (!ts) return '';
+              try { return new Date(Number(ts)).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return ''; }
+            };
+
             return (
-              <div key={m.id} className={`chat-msg-wrapper ${fromMe ? 'from-me' : 'from-other'} ${showAvatar ? 'with-avatar' : ''}`}>
-                {!fromMe && showAvatar && (
-                  <img
-                    className="chat-msg-avatar"
-                    src={other?.photoURL || '/avatar.png'}
-                    alt={title || 'User'}
-                    onError={(e) => { e.currentTarget.src = '/avatar.png'; }}
-                  />
+              <React.Fragment key={m.id}>
+                {showDateSeparator && (
+                  <div className="chat-date-separator" aria-hidden>
+                    {formatDate(curTs)}
+                  </div>
                 )}
-                <div className="chat-msg">{m.text}</div>
-                {/* Seen indicator removed */}
-              </div>
+                <div className={`chat-msg-wrapper ${fromMe ? 'from-me' : 'from-other'} ${showAvatar ? 'with-avatar' : ''}`}>
+                  {!fromMe && showAvatar && (
+                    <img
+                      className="chat-msg-avatar"
+                      src={other?.photoURL || '/avatar.png'}
+                      alt={title || 'User'}
+                      onError={(e) => { e.currentTarget.src = '/avatar.png'; }}
+                    />
+                  )}
+
+                  {fromMe ? (
+                    <span className="chat-msg-time left" title={new Date(curTs).toLocaleString()}>{formatTime(curTs)}</span>
+                  ) : null}
+
+                  <div className="chat-msg">{m.text}</div>
+
+                  {!fromMe ? (
+                    <span className="chat-msg-time right" title={new Date(curTs).toLocaleString()}>{formatTime(curTs)}</span>
+                  ) : null}
+                </div>
+              </React.Fragment>
             );
           })
         )}

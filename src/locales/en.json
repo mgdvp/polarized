@@ -101,6 +101,8 @@
       "hour": { "one": "hour", "other": "hours", "short": "h" },
       "minute": { "one": "minute", "other": "minutes", "short": "m" },
       "second": { "one": "second", "other": "seconds", "short": "s" }
-    }
+    },
+    "yesterday": "yesterday",
+    "today": "today"
   }
 }

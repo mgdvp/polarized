@@ -1,6 +1,15 @@
 ## Changelog
 
-### v2.3.0-beta (2025-11-01)
+### v2.4.0-beta (2025-11-02)
+- Added: Chat date separator with "Today" and "Yesterday" labels (1-hour gap threshold)
+- Added: Message timestamp shown on hover
+- Removed: Automatic chat selection on wide screens
+- Fixed: Text ellipsis issue in chat list message preview
+- Fixed: Long words breaking chat message bubbles on small screens
+- Fixed: Height issue on chat screen on small screens (using dvh) (beta!)
+
+
+### v2.3.0 (2025-11-01)
 - Added: Typing indicator in chat view
 - Added: Button to route home on mobile screens when in chat view
 - Added: Profile photo in user's first message after other user's message
@@ -8,13 +17,13 @@
 - Performance optimizations
 - UI & UX improvements
 
-### v2.2.2-beta (2025-10-29)
+### v2.2.2 (2025-10-29)
 - Fixed: Chat input focus issue on mobile (keyboard closing after sending message)
 - Improved: Security rules for chat messages
 - UI & UX improvements
 - Minor bug fixes & optimizations
 
-### v2.2.1-beta (2025-10-28)
+### v2.2.1 (2025-10-28)
 - Improved: Code refactoring over chat components
 - Fixed: Like/comment functionality not working due to firebase rules misconfiguration
 
