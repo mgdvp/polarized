@@ -1,33 +1,35 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 const ChatList = ({ conversations, selectedChatId, onSelect, loading, className }) => {
   const { t } = useTranslation();
 
   return (
-    <div className={`chat-list ${className || ''}`} style={{ width: 320, borderRight: '1px solid #444', paddingRight: 12, overflowY: 'auto' }}>
-      <div style={{ padding: 12, fontWeight: 600 }}>{t('messages')}</div>
+    <div className={`chat-list ${className || ''}`}>
+      <div className="chat-list-header">
+        <Link to="/" className="chat-home-button mobile-only" aria-label="Home" title="Home">🏠</Link>
+        <span>{t('messages')}</span>
+      </div>
       {loading ? (
-        <div style={{ padding: 12 }}>…</div>
+        <div className="chat-list-empty">…</div>
       ) : conversations.length === 0 ? (
-        <div style={{ padding: 12 }}>{t('noChats')}</div>
+        <div className="chat-list-empty">{t('noChats')}</div>
       ) : (
-        conversations.map((c) => (
+        conversations.map((c) => {
+          return (
           <button
             key={c.chatId}
-            className="chat-list-user"
+            className={`chat-list-user ${c.chatId === selectedChatId ? 'selected' : ''}`}
             onClick={() => onSelect(c.chatId)}
-            style={{
-              background: c.chatId === selectedChatId ? '#363636' : '#262626',
-            }}
           >
             <img
               src={c.other?.photoURL || '/avatar.png'}
               alt={c.other?.displayName || c.other?.username || c.otherUid}
-              style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
+              className="chat-list-avatar"
             />
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600 }}>
+            <div className="chat-list-content">
+              <div className="chat-list-name">
                 {c.other?.displayName || c.other?.username || `@${c.otherUid}`}
               </div>
               <div className="chat-list-last-message">
@@ -35,7 +37,7 @@ const ChatList = ({ conversations, selectedChatId, onSelect, loading, className 
               </div>
             </div>
           </button>
-        ))
+        )})
       )}
     </div>
   );

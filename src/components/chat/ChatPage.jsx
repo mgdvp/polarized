@@ -20,6 +20,7 @@ const ChatPage = ({ currentUser }) => {
   const [conversations, setConversations] = useState([]);
   const [selectedChatId, setSelectedChatId] = useState(initialChatId);
   const [selectedChatOtherUserName, setSelectedChatOtherUserName] = useState(null);
+  const [selectedChatOther, setSelectedChatOther] = useState(null);
   const [loadingChats, setLoadingChats] = useState(true);
 
   const uid = currentUser?.uid;
@@ -55,6 +56,7 @@ const ChatPage = ({ currentUser }) => {
       if (!selectedChatId && arr.length > 0 && typeof window !== 'undefined' && window.innerWidth > 600) {
         setSelectedChatId(arr[0].chatId);
         setSelectedChatOtherUserName(arr[0].other?.displayName || arr[0].other?.username || `@${arr[0].otherUid}`);
+        setSelectedChatOther(arr[0].other || { uid: arr[0].otherUid });
       }
     });
     return () => off(userChatsRef);
@@ -113,12 +115,13 @@ const ChatPage = ({ currentUser }) => {
           setSelectedChatId(chatId);
           const c = conversations.find((x) => x.chatId === chatId);
           setSelectedChatOtherUserName(c?.other?.displayName || c?.other?.username || (c ? `@${c.otherUid}` : ''));
+          setSelectedChatOther(c?.other || (c ? { uid: c.otherUid } : null));
         }}
         loading={loadingChats}
       />
       <div className={`chat-window ${selectedChatId ? '' : 'hidden-mobile'}`} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-        <ChatWindow chatId={selectedChatId} uid={uid} title={selectedChatOtherUserName} onBack={() => setSelectedChatId(null)} />
-        <MessageInput onSend={sendMessage} disabled={!selectedChatId || !uid} />
+        <ChatWindow chatId={selectedChatId} uid={uid} other={selectedChatOther} title={selectedChatOtherUserName} onBack={() => setSelectedChatId(null)} />
+        <MessageInput onSend={sendMessage} disabled={!selectedChatId || !uid} chatId={selectedChatId} uid={uid} other={selectedChatOther} />
       </div>
     </div>
   );

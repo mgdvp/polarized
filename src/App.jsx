@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
 import Login from './components/Login';
@@ -16,6 +16,7 @@ import PostPage from './components/PostPage';
 import './style.css';
 
 function App() {
+  const location = useLocation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [hasUsername, setHasUsername] = useState(false);
@@ -80,12 +81,12 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
+    <div className={`App ${location.pathname.startsWith('/messages') ? 'route-messages' : ''}`}>
       <Header user={user} />
       <Routes>
         <Route path="/post/:postId" element={<PostPage currentUser={user} />} />
         <Route path="/profile/:username" element={<Profile currentUser={user} />} />
-  <Route path="/messages" element={<ChatPage currentUser={user} />} />
+        <Route path="/messages" element={<ChatPage currentUser={user} />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/" element={
           user ? (

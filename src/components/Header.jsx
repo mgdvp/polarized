@@ -12,7 +12,7 @@ const Header = ({ user }) => {
       
       <div className="header-user-info">
         {isLoggedIn && (
-          <Link to="/messages" style={{ marginRight: 12 }}>
+          <Link to="/messages" className="header-messages-link">
             {t('messages')}
           </Link>
         )}
