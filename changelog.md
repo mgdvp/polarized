@@ -3,6 +3,7 @@
 ### v2.3.0-beta (2025-11-01)
 - Added: Typing indicator in chat view
 - Added: Button to route home on mobile screens when in chat view
+- Added: Profile photo in user's first message after other user's message
 - Removed: Chat input send button visibility on mobile
 - Performance optimizations
 - UI & UX improvements
