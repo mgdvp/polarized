@@ -1,5 +1,5 @@
 # 🌀 Polarized
-*A minimal social feed built with React + Firebase.*
+*A featured social media app with real-time chat functionality.*
 
 > Screenshot from v1.0-beta  
 > <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a3a2b7d4-e63a-4535-9f3b-082802923e36" />
@@ -66,6 +66,11 @@ Further updates and changelogs can be found in the [changelog.md](changelog.md) 
 - Display user’s posts and activity
 - Follow/unfollow other users
 
+### Real-time Chat (v2.2.0-beta)
+- One-on-one messaging between users
+- Typing indicators
+- Responsive chat UI for desktop and mobile
+
 ### 💎 UX
 - Smooth **skeleton loaders** for profile and post grids  
 - Responsive design for desktop & mobile  
@@ -74,8 +79,8 @@ Further updates and changelogs can be found in the [changelog.md](changelog.md) 
 ---
 
 ## 🧰 Tech Stack
-- **Frontend:** React + React Router + Vite  
-- **Backend:** Firebase v9 (Auth, Firestore, Storage)
+- **Frontend:** React + React Router + Vite + Ionicons
+- **Backend:** Firebase v9 (Auth, Firestore, Storage, Realtime Database)
 
 ---
 
@@ -108,6 +113,7 @@ Open the printed local URL in your browser.
   - Email/Password: enabled
   - Google: enabled (optional)
 - Firestore: start in test mode during development
+- Realtime Database: start in test mode during development (for chat feature)
 - Storage: start in test mode during development
 
 Suggested minimal development rules (tighten for production):
@@ -147,40 +153,8 @@ service firebase.storage {
 }
 ```
 
-## Project structure (selected)
-- `src/App.jsx` – routes, auth state wiring
-- `src/firebase.js` – initializes Firebase using `.env` (VITE_ vars)
-- `src/components/`
-  - `Login.jsx`, `SignUp.jsx` – auth screens (email verification handled)
-  - `Header.jsx` – app header
-  - `Profile.jsx` – profile card, edit name, logout, user-specific feed
-  - `CreatePost.jsx` – image upload + caption (client compression)
-  - `PostsFeed.jsx` – responsive grid feed with likes and skeletons
-- `src/utils/image.js` – Canvas compression helper
-- `src/utils/firebaseErrors.js` – maps common Auth errors to friendly text
-- `src/style.css` and `src/styles/*.css` – global + component styles
-
-## How posts are stored
-Collection: `posts`
-```json
-{
-  "postedAt": <serverTimestamp>,
-  "imageUrl": "https://...",
-  "caption": "string (<= 100 chars)",
-  "author": "username",
-  "authorUid": "uid",
-  "authorPp": "photoURL",
-  "likeCount": 0
-}
-```
-Per-user likes:
-- Subcollection: `posts/{postId}/likes/{uid}` with `{ uid, createdAt }` (for idempotency)
-
 ## Notes & troubleshooting
 - Email verification: Email/password users must verify before they can continue; unverified sessions are treated as logged out.
-- Profile feed: We support legacy posts without `authorUid` by also filtering by `author` (username) when viewing profiles.
-- Grid images: We reserve space with a 3:4 wrapper and `object-fit: contain` to avoid layout shift and cropping.
-- Env changes: If you change `.env`, restart the dev server for Vite to pick them up.
 
 ## Scripts
 ```powershell

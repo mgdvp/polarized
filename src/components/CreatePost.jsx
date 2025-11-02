@@ -122,10 +122,10 @@ const CreatePost = ({ currentUser }) => {
           style={{ display: 'none' }}
         />
         <div className="upload-actions">
-          <button type="button" onClick={triggerFilePicker}>
-            {previewUrl ? t('changeImage') : t('uploadImage')}
-          </button>
-        </div>
+              <button type="button" onClick={triggerFilePicker}>
+                {previewUrl ? t('changeImage') : t('selectPhoto')}
+              </button>
+            </div>
         {previewUrl && (
           <div className="image-preview">
             <img src={previewUrl} alt={t('selectedPreviewAlt')} />

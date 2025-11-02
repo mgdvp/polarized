@@ -192,26 +192,25 @@ const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername }) => {
               disabled={!currentUser}
               title={!currentUser ? t('signInToLike') : ''}
             >
-              <span className="heart">{likedMap[post.id] ? '❤' : '♡'}</span>{' '}
-              {post.likeCount || 0}
+              <ion-icon name={likedMap[post.id] ? 'heart' : 'heart-outline'} className="like-icon"></ion-icon>
+              <span>{post.likeCount || 0}</span>
             </button>
-            <Link to={`/post/${post.id}`} className="comment-button" title={t('viewAndComment')}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor" 
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-              <path d="M21 11.5c0 4.19-3.83 7.5-8.5 7.5S4 15.69 4 11.5 7.83 4 12.5 4 21 7.31 21 11.5z"/>
-              <path d="M11 20.3c-1.4-.4-2.8-.7-4.2-.7-1.4 0-2.8.3-4.2.7"/>
-              <path d="M12.5 19v2"/>
-              </svg>
-              <span className="comment-count">{post.commentCount || 0}</span>
+            <Link
+              to={`/post/${post.id}`}
+              state={{
+                preloadedPostData: {
+                  imageUrl: post.imageUrl,
+                  caption: post.caption,
+                  author: post.author,
+                  authorPp: post.authorPp,
+                  postedAt: post.postedAt.toMillis(),
+                },
+              }}
+              className="comment-button"
+              title={t('viewAndComment')}
+            >
+              <ion-icon className="comment-icon" name="chatbubble-outline"></ion-icon>
+              <span>{post.commentCount || 0}</span>
             </Link>
           </div>
         </div>

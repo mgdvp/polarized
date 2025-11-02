@@ -71,14 +71,14 @@ button:hover {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
+  padding: 1.3rem 2rem;
   background-color: #1a1a1a;
   border: 1px solid #333;
   border-radius: 15px;
 }
 
 .logo {
-  font-size: 1.5rem;
+  /* font-size: 1.5rem; */
   font-weight: bold;
   color: #fff;
   text-decoration: none;
@@ -333,14 +333,16 @@ form {
   padding: 0.75rem 1rem;
   border-top: 1px solid #383838;
 }
-.like-button {
+.like-button, .comment-button {
   background: transparent;
   border: 1px solid var(--border-color);
   color: var(--text-primary);
   border-radius: 999px;
   padding: 0.3rem 0.8rem;
   transition: all 0.2s ease;
+  font-size: 14px;
 }
+
 .like-button .heart {
   color: #ff4d4d;
 }
@@ -368,28 +370,22 @@ form {
 }
 
 .comment-button {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  color: var(--text-primary);
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 .comment-button:hover {
   background: var(--bg-main);
   border-color: var(--accent-color);
   text-decoration: none;
-  transform: translateY(-1px);
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+  opacity: 0.9;
 }
 
 .post-footer button,
 .post-footer a {
   height: 32px;
   min-width: 60px;
+  color: var(--text-secondary);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .post-page {
@@ -674,13 +670,6 @@ button {
   border: 1px solid #444;
 }
 
-.comment-button .comment-count {
-  color: var(--text-secondary);
-  margin-left: 4px;
-  font-size: 0.9rem;
-}
-
-
 .btn-primary {
   background: var(--accent-color);
   color: var(--bg-main);
@@ -821,16 +810,6 @@ a, button{
   justify-content: flex-start;
 }
 
-.chat-home-button{
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-}
-
 .chat-list-empty{
   padding: 12px;
   color: var(--text-secondary);
@@ -898,10 +877,6 @@ a, button{
 }
 
 .header-messages-link{
-  margin-right: 12px;
-}
-
-.header-messages-link{
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -918,6 +893,40 @@ a, button{
   transition: opacity 120ms ease;
   white-space: nowrap;
   margin-bottom: 2px;
+}
+
+.header-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-user-pp{
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--accent-color);
+}
+
+.header-profile-link{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-create-link ion-icon,
+.header-messages-link ion-icon{
+  font-size: 22px;
+  color: var(--text-primary);
+}
+
+.header-create-link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
 }
 .chat-msg-wrapper:hover .chat-msg-time{
   opacity: 1;
@@ -946,6 +955,28 @@ a, button{
   margin-right: auto;
 }
 
+.header-user-info a{
+  vertical-align: middle;
+}
+
+ion-icon{
+  font-size: 24px;
+  vertical-align: bottom;
+}
+
+.comment-icon, .like-icon{
+  margin-right: 4px;
+  font-size: 1rem;
+}
+
+.comment-icon{
+  margin-top: 1px;
+  color: #ddd;
+}
+
+.like-icon{
+  color: #ff4d4d;
+}
 
 @media only screen and (max-width: 900px) {
   .post-page {
@@ -1009,8 +1040,15 @@ a, button{
   .hidden-mobile{
     display: none !important;
   }
-  #msg-send-button{
-    display: none !important;
+  .logo img{
+    height: 20px;
+  }
+  .logo{
+    font-size: 1.5rem;
+    height: 34px;
+  }
+  .chat-messages{
+    padding: 8px;
   }
   
   /* Trying to fix height bug on mobile */
@@ -1019,7 +1057,7 @@ a, button{
     height: 100dvh;
   }
   .App, .chat-page{
-    height: 100%;
+    height: 100% !important;
   }
 }
 
@@ -1027,4 +1065,32 @@ a, button{
   .chat-info-mobile{
     display: none !important;
   }
+}
+
+/* CSS (only styles the 404 text) */
+.error-404{
+  display: inline-block;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 800;
+  /* responsive size */
+  font-size: clamp(48px, 30vw, 160px);
+  line-height: 1;
+  letter-spacing: -2px;
+
+  /* colorful gradient text */
+  background: linear-gradient(90deg, #60a5fa 0%, #7dd3fc 30%, #c084fc 60%, #fb7185 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent; /* for Chrome/Safari */
+  color: transparent;                   /* for other browsers */
+
+  /* subtle depth and glow (optional) */
+  text-shadow:
+    0 6px 18px rgba(2,6,23,0.6),
+    0 2px 6px rgba(0,0,0,0.35);
+}
+
+/* Optional: give the text a subtle stroked outline for low-contrast backgrounds */
+.error-404.stroke {
+  -webkit-text-stroke: 1px rgba(0,0,0,0.25);
 }

@@ -70,6 +70,7 @@
   "usernameTaken": "Bu kullanıcı adı zaten alınmış.",
   "usernameCheckFailed": "Kullanıcı adı uygunluk kontrolü yapılamadı. Lütfen tekrar deneyin.",
   "passwordMin": "Şifre en az 6 karakter olmalıdır.",
+  "notFound": "Aradığınız sayfa bulunamadı.",
   "auth": {
     "invalidEmail": "Lütfen geçerli bir e‑posta adresi girin.",
     "missingEmail": "Lütfen e‑posta adresinizi girin.",

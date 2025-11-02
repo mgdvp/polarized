@@ -53,7 +53,7 @@ const CommentInput = ({ postId, currentUser, onPosted }) => {
         disabled={submitting}
       />
       <button type="submit" disabled={submitting || !text.trim()}>
-        {submitting ? t('posting') : t('post')}
+        <ion-icon name="send" style={{ fontSize: '1.2rem', verticalAlign: 'bottom', marginLeft: 2 }}></ion-icon>
       </button>
     </form>
   );

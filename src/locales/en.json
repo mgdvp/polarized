@@ -48,6 +48,7 @@
   "addACaption": "Add a caption (optional)",
   "createPostTitle": "Create a post",
   "uploadImage": "Upload image",
+  "selectPhoto": "Select a photo",
   "changeImage": "Change image",
   "uploadingImage": "Uploading image…",
   "mustSignInToPost": "You must be signed in to post.",
@@ -70,6 +71,7 @@
   "usernameTaken": "Username is already taken.",
   "usernameCheckFailed": "Could not check username availability. Please try again.",
   "passwordMin": "Password should be at least 6 characters.",
+  "notFound": "The page you are looking for does not exist.",
   "auth": {
     "invalidEmail": "Please enter a valid email address.",
     "missingEmail": "Please enter your email address.",

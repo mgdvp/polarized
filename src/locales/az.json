@@ -70,6 +70,7 @@
   "usernameTaken": "Bu istifadəçi adı artıq götürülüb.",
   "usernameCheckFailed": "İstifadəçi adının mövcudluğu yoxlanıla bilmədi. Yenidən cəhd edin.",
   "passwordMin": "Şifrə ən azı 6 simvol olmalıdır.",
+  "notFound": "Axtardığınız səhifə tapılmadı.",
   "auth": {
     "invalidEmail": "Düzgün e‑poçt ünvanı daxil edin.",
     "missingEmail": "Zəhmət olmasa e‑poçt ünvanınızı daxil edin.",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useLocation } from 'react-router-dom';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
 import CommentList from './comments/CommentList';
@@ -9,16 +9,24 @@ import { useTranslation } from 'react-i18next';
 
 const PostPage = ({ currentUser }) => {
   const { postId } = useParams();
-  const [post, setPost] = useState(null);
+  const location = useLocation();
+
+  const initialPostData = location.state?.preloadedPostData || null;
+
+  const [post, setPost] = useState(initialPostData);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [commentsRefresh, setCommentsRefresh] = useState(0);
   const { t } = useTranslation();
 
   useEffect(() => {
+    console.log('Initial Post Data:', initialPostData);
+    
     const fetchPost = async () => {
-      setLoading(true);
+      if (!initialPostData) setLoading(true);
+
       setError('');
+      
       try {
         const ref = doc(db, 'posts', postId);
         const snap = await getDoc(ref);
@@ -36,9 +44,9 @@ const PostPage = ({ currentUser }) => {
       }
     };
     if (postId) fetchPost();
-  }, [postId, t]);
+  }, [postId, t, initialPostData]);
 
-  if (loading) {
+  if (loading && !post) {
     return (
       <div className="post-page">
         <div className="post-detail">
@@ -62,7 +70,7 @@ const PostPage = ({ currentUser }) => {
     );
   }
 
-  if (error) {
+  if (error || !post) {
     return <div className="error-message" style={{ maxWidth: 720, margin: '2rem auto' }}>{error}</div>;
   }
 
@@ -100,10 +108,10 @@ const PostPage = ({ currentUser }) => {
       </div>
       <aside className="comments-panel">
         <h3>{t('comments')}</h3>
-        <CommentList postId={post.id} refreshToken={commentsRefresh} />
+        <CommentList postId={postId} refreshToken={commentsRefresh} />
         {currentUser ? (
           <CommentInput
-            postId={post.id}
+            postId={postId}
             currentUser={currentUser}
             onPosted={() => setCommentsRefresh((n) => n + 1)}
           />

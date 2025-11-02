@@ -11,25 +11,19 @@ import UsernameForm from './components/UsernameForm';
 import Header from './components/Header';
 import ChatPage from './components/chat/ChatPage';
 import PostsFeed from './components/PostsFeed';
+import CreatePost from './components/CreatePost';
 import Profile from './components/Profile';
 import PostPage from './components/PostPage';
 import './style.css';
 
 function App() {
   const location = useLocation();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [hasUsername, setHasUsername] = useState(false);
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
+  const [loading, setLoading] = useState(!user);
+  const [hasUsername, setHasUsername] = useState(user?.username ? true : false);
   const { t } = useTranslation();
 
   useEffect(() => {
-    const localUser = JSON.parse(localStorage.getItem('user'));
-    if (localUser) {
-      setUser(localUser);
-      setHasUsername(!!localUser.username);
-      setLoading(false);
-    }
-
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
         // If using email/password and the email isn't verified, treat as signed out
@@ -80,11 +74,19 @@ function App() {
     return () => unsubscribe();
   }, []);
 
+  if (loading) {
+    return (
+      <div></div>
+    );
+  }
+
+
   return (
     <div className={`App ${location.pathname.startsWith('/messages') ? 'route-messages' : ''}`}>
       <Header user={user} />
       <Routes>
         <Route path="/post/:postId" element={<PostPage currentUser={user} />} />
+        <Route path="/create" element={<CreatePost currentUser={user} />} />
         <Route path="/profile/:username" element={<Profile currentUser={user} />} />
         <Route path="/messages" element={<ChatPage currentUser={user} />} />
         <Route path="/signup" element={<SignUp />} />
@@ -107,6 +109,12 @@ function App() {
               <PostsFeed currentUser={user} />
             </>
           )
+        } />
+        <Route path="*" element={
+          <div style={{marginTop: '4rem'}}>
+            <span class="error-404">404</span>
+            <p>{t('notFound')}</p>
+          </div>
         } />
       </Routes>
     </div>

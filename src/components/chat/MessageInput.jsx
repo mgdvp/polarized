@@ -70,7 +70,9 @@ const MessageInput = ({ onSend, disabled, chatId, uid, other }) => {
         placeholder={t('typeMessage')}
         disabled={disabled}
       />
-      <button type="submit" className="btn-primary" disabled={disabled} id="msg-send-button">{t('send')}</button>
+      <button type="submit" className="btn-primary" disabled={disabled} id="msg-send-button">
+        <ion-icon name="send" style={{ fontSize: '1.2rem', verticalAlign: 'bottom', marginLeft: 2 }}></ion-icon>
+      </button>
     </form>
   );
 };

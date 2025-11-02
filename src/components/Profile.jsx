@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth, storage } from '../firebase';
 import { rtdb } from '../firebase';
 import { ref as dbRef, get as rtdbGet, update as rtdbUpdate, serverTimestamp } from 'firebase/database';
 import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
-import CreatePost from './CreatePost';
 import PostsFeed from './PostsFeed';
 import { cropImageToSquare } from '../utils/imageCompressor';
 import { useTranslation } from 'react-i18next';
@@ -115,9 +114,51 @@ const Profile = ({ currentUser }) => {
     }
   };
 
+  // Avatar upload handlers (allow current user to change profile photo)
   const triggerPhotoPicker = () => {
-    if (!isCurrentUser || uploading) return;
+    if (!isCurrentUser) return;
     fileInputRef.current?.click();
+  };
+
+  const onPhotoSelected = async (e) => {
+    if (!isCurrentUser || !userProfile?.uid) return;
+    const file = e?.target?.files?.[0];
+    if (!file) return;
+    try {
+      setUploading(true);
+      // Crop/resize to square thumbnail
+      const blob = await cropImageToSquare(file);
+      const path = `avatars/${userProfile.uid}/${Date.now()}_${file.name}`;
+      const sRef = storageRef(storage, path);
+      await uploadBytes(sRef, blob);
+      const url = await getDownloadURL(sRef);
+
+      // Update Firestore user doc
+      const userRef = doc(db, 'users', userProfile.uid);
+      await updateDoc(userRef, { photoURL: url });
+
+      // If viewing own profile, update auth profile and local cache
+      if (currentUser?.uid === userProfile.uid) {
+        try {
+          await updateAuthProfile(auth.currentUser, { photoURL: url });
+        } catch (e) {
+          // Non-fatal if auth update fails
+          console.warn('Auth profile update failed:', e);
+        }
+        const cached = JSON.parse(localStorage.getItem('user') || '{}');
+        localStorage.setItem('user', JSON.stringify({ ...cached, photoURL: url }));
+      }
+
+      // Update local UI state
+      setUserProfile((prev) => ({ ...prev, photoURL: url }));
+    } catch (err) {
+      console.error('Failed to upload avatar:', err);
+      alert(t('couldNotUploadImage'));
+    } finally {
+      setUploading(false);
+      // clear file input value so same file can be picked again
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
   };
 
   const toggleFollow = async () => {
@@ -204,56 +245,7 @@ const Profile = ({ currentUser }) => {
     }
   };
 
-  const onPhotoSelected = async (e) => {
-    try {
-      const file = e.target.files?.[0];
-      // reset so same file can be reselected later
-      e.target.value = '';
-      if (!file) return;
-      if (!file.type.startsWith('image/')) {
-        alert(t('selectImageFile'));
-        return;
-      }
-      if (!userProfile?.uid) return;
-
-      setUploading(true);
-
-      // Crop to 240x240 for avatar at quality 1.0
-      const croppedBlob = await cropImageToSquare(file, 240, 1.0);
-
-      const avatarRef = storageRef(storage, `avatars/${userProfile.uid}.webp`);
-      await uploadBytes(avatarRef, croppedBlob, { contentType: 'image/webp' });
-      const url = await getDownloadURL(avatarRef);
-
-      // Update Firestore profile document
-      const userRef = doc(db, 'users', userProfile.uid);
-      await updateDoc(userRef, { photoURL: url });
-
-      // Update local UI state
-      setUserProfile((prev) => ({ ...prev, photoURL: url }));
-
-      // Update auth profile if this is the current user
-      if (auth.currentUser && isCurrentUser) {
-        try {
-          await updateAuthProfile(auth.currentUser, { photoURL: url });
-        } catch (err) {
-          // Non-fatal; log and proceed
-          console.warn('Auth profile not updated:', err);
-        }
-      }
-
-      // Update cached user in localStorage if present
-      const cached = JSON.parse(localStorage.getItem('user') || '{}');
-      if (cached && typeof cached === 'object') {
-        localStorage.setItem('user', JSON.stringify({ ...cached, photoURL: url }));
-      }
-    } catch (err) {
-      console.error('Failed to update profile photo:', err);
-      alert(t('couldNotUpdatePhoto'));
-    } finally {
-      setUploading(false);
-    }
-  };
+  // end avatar handlers
 
   if (loading) {
     return (
@@ -284,36 +276,30 @@ const Profile = ({ currentUser }) => {
       {userProfile ? (
         <>
           <div className="profile-card" id="profile-card">
-            <div className={`profile-picture-wrapper${isCurrentUser ? ' editable' : ''}${uploading ? ' uploading' : ''}`}>
-              <img src={userProfile.photoURL} alt={userProfile.displayName} className="profile-picture" />
+          <div className={`profile-picture-wrapper${isCurrentUser ? ' editable' : ''}${uploading ? ' uploading' : ''}`}>
+            <img src={userProfile.photoURL} alt={userProfile.displayName} className="profile-picture" onClick={triggerPhotoPicker} />
               {isCurrentUser && (
-                <>
-                  <button
-                    type="button"
-                    className="pfp-overlay"
-                    onClick={triggerPhotoPicker}
-                    aria-label={t('changeProfilePhoto')}
-                    title={t('changeProfilePhoto')}
-                    disabled={uploading}
-                  >
-                    {uploading ? (
-                      <span className="pfp-uploading">{t('uploading')}</span>
-                    ) : (
-                      <svg className="pfp-edit-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm2.92 2.33H5v-.92l9.06-9.06.92.92L5.92 19.58zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
-                      </svg>
-                    )}
-                  </button>
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="pfp-input"
-                    onChange={onPhotoSelected}
-                  />
-                </>
-              )}
-            </div>
+                  <>
+                    <button
+                      type="button"
+                      className="pfp-overlay"
+                      onClick={triggerPhotoPicker}
+                      aria-label={t('changeProfilePhoto')}
+                      title={t('changeProfilePhoto')}
+                      disabled={uploading}
+                    >
+                      {uploading ? (
+                        <span className="pfp-uploading">{t('uploading')}</span>
+                      ) : (
+                        <svg className="pfp-edit-icon" viewBox="0 0 24 24" aria-hidden="true">
+                          <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zm2.92 2.33H5v-.92l9.06-9.06.92.92L5.92 19.58zM20.71 7.04a1.003 1.003 0 0 0 0-1.42l-2.34-2.34a1.003 1.003 0 0 0-1.42 0l-1.83 1.83 3.75 3.75 1.84-1.82z"/>
+                        </svg>
+                      )}
+                    </button>
+                    <input type="file" ref={fileInputRef} onChange={onPhotoSelected} className="pfp-input" />
+                  </>
+                )}
+              </div>
             <div className="profile-info">
               <div className="profile-header">
                 <div className="identity">
@@ -358,7 +344,13 @@ const Profile = ({ currentUser }) => {
             </div>
           </div>
           {isCurrentUser && (
-            <CreatePost currentUser={currentUser} />
+            <div style={{ maxWidth: 720, margin: '1rem auto' }}>
+              <button style={{ width: '100%', maxWidth: '300px' }}>
+                <Link to="/create" style={{ display: 'inline-block' }}>
+                  {t('createPostTitle')}
+                </Link>
+              </button>
+            </div>
           )}
           <PostsFeed
             currentUser={currentUser}

@@ -1,13 +1,26 @@
 ## Changelog
 
+### v2.5.0-beta (2025-11-03)
+- Chat Improvements:
+    - Added: Infinite scroll for older chat messages (loads 50 more on scroll-to-top)
+    - Changed: New message streaming switched to `onChildAdded` after initial batch
+    - Improved: Date/time formatting performance by moving helpers outside the render loop
+    - Fixed: Height issue on chat screen on small screens (using dvh) (beta!)
+    - MessageBubble is now independent component and memoized
+- Added: Ionic icon implementation for entire app (replacing emoji buttons)
+- Added: Instant post data passing (thanks to React Router ```state```.)
+- Added: 404 Not Found page with translation support
+- Added: Create post button on header for easy access and navigation
+- Changed: Profile photo in header instead of username
+- Fixed: Millisecond login flash bug even user logged in (loading state handling)
+- UI & UX improvements
+
 ### v2.4.0-beta (2025-11-02)
 - Added: Chat date separator with "Today" and "Yesterday" labels (1-hour gap threshold)
 - Added: Message timestamp shown on hover
 - Removed: Automatic chat selection on wide screens
 - Fixed: Text ellipsis issue in chat list message preview
 - Fixed: Long words breaking chat message bubbles on small screens
-- Fixed: Height issue on chat screen on small screens (using dvh) (beta!)
-
 
 ### v2.3.0 (2025-11-01)
 - Added: Typing indicator in chat view

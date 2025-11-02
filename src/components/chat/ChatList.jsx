@@ -8,7 +8,9 @@ const ChatList = ({ conversations, selectedChatId, onSelect, loading, className 
   return (
     <div className={`chat-list ${className || ''}`}>
       <div className="chat-list-header">
-        <Link to="/" className="chat-home-button mobile-only" aria-label="Home" title="Home">🏠</Link>
+        <Link to="/" className="chat-home-button mobile-only" aria-label="Home" title="Home" style={{ padding: 6 }}>
+          <ion-icon name="home-outline" style={{ color: 'var(--text-primary)' }}></ion-icon>
+        </Link>
         <span>{t('messages')}</span>
       </div>
       {loading ? (
