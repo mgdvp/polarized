@@ -1,8 +1,9 @@
 # 🌀 Polarized
 *A featured social media app with real-time chat functionality.*
 
-> Screenshot from v1.0-beta  
-> <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/a3a2b7d4-e63a-4535-9f3b-082802923e36" />
+> Screenshot from v2.5.0
+> <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/272635ba-d1b6-4902-8577-4430cee41065" />
+
 
 ---
 
@@ -164,4 +165,5 @@ npm run preview # Preview production build locally
 ```
 
 ## License
+
 MIT (add your preferred license if different)
