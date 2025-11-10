@@ -165,7 +165,6 @@ const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername }) => {
               className="post-author-pp"
               src={post.authorPp || '/default-avatar.png'}
               alt={post.author || 'user'}
-              onError={(e) => { e.currentTarget.src = '/default-avatar.png'; }}
             />
             <div className="post-author">
               <Link to={`/profile/${post.author}`} className="name">
@@ -220,3 +219,4 @@ const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername }) => {
 };
 
 export default PostsFeed;
+
