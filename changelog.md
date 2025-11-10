@@ -1,5 +1,8 @@
 ## Changelog
 
+### v2.5.1-beta (2025-11-10)
+- Fixed: Avatar image onError listener makes infinite requests to server
+
 ### v2.5.0-beta (2025-11-03)
 - Chat Improvements:
     - Added: Infinite scroll for older chat messages (loads 50 more on scroll-to-top)
@@ -80,4 +83,5 @@
 - Bug fixes & optimizations
 
 ### v1.0 (2025-10-18)
+
 - Initial release
