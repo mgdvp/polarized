@@ -1,5 +1,8 @@
 ## Changelog
 
+### v2.5.2-beta (2025-11-11)
+- Fixed: More comments growing container height instead of enabling scroll (overflow issue)
+
 ### v2.5.1-beta (2025-11-10)
 - Fixed: Avatar image onError listener makes infinite requests to server
 
@@ -18,7 +21,7 @@
 - Fixed: Millisecond login flash bug even user logged in (loading state handling)
 - UI & UX improvements
 
-### v2.4.0-beta (2025-11-02)
+### v2.4.0 (2025-11-02)
 - Added: Chat date separator with "Today" and "Yesterday" labels (1-hour gap threshold)
 - Added: Message timestamp shown on hover
 - Removed: Automatic chat selection on wide screens
