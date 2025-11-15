@@ -1,6 +1,6 @@
 ## Changelog
 
-### v2.6.0-beta (2025-11-14)
+### v2.6.0-beta (2025-11-15)
 - Redesign Login and Signup (Username Form) pages.
 - Added: Discover page and default post view for profile pages is now grid view
 - Added: Search users by username on Discover page
@@ -8,13 +8,13 @@
 - Added: User online/offline status indicator
 - UI & UX improvements
 
-### v2.5.2-beta (2025-11-11)
+### v2.5.2 (2025-11-11)
 - Fixed: More comments growing container height instead of enabling scroll (overflow issue)
 
-### v2.5.1-beta (2025-11-10)
+### v2.5.1 (2025-11-10)
 - Fixed: Avatar image onError listener makes infinite requests to server
 
-### v2.5.0-beta (2025-11-03)
+### v2.5.0 (2025-11-03)
 - Chat Improvements:
     - Added: Infinite scroll for older chat messages (loads 50 more on scroll-to-top)
     - Changed: New message streaming switched to `onChildAdded` after initial batch
