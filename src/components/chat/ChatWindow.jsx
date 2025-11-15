@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useLayoutEffect, useMemo, useCallba
 import { useTranslation } from 'react-i18next';
 import { rtdb } from '../../firebase';
 import { ref, onValue, off, query, orderByChild, limitToLast, onChildAdded, startAt, endAt, get } from 'firebase/database';
+import timeAgo from '../../utils/timeAgo';
 import MessageBubble from './MessageBubble';
 
 const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
@@ -17,6 +18,7 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
   const oldestTsRef = useRef(null);
   const newestTsRef = useRef(null);
   const idSetRef = useRef(new Set());
+  const [presence, setPresence] = useState(null);
 
   const otherUid = useMemo(() => {
     if (!chatId || !uid) return null;
@@ -101,6 +103,16 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
       detachNew.current?.();
     };
   }, [chatId]);
+
+  // Presence subscription for other user
+  useEffect(() => {
+    if (!otherUid) return;
+    const statusRef = ref(rtdb, `status/${otherUid}`);
+    const unsub = onValue(statusRef, (snap) => {
+      setPresence(snap.val() || null);
+    });
+    return () => off(statusRef);
+  }, [otherUid]);
 
   // Auto-scroll to bottom on new messages and when typing row appears
   useLayoutEffect(() => {
@@ -228,7 +240,14 @@ const ChatWindow = ({ chatId, uid, other, title, onBack }) => {
     <>
       <div className='chat-info-mobile'>
         {onBack && <button onClick={onBack}><ion-icon name="arrow-back-outline"></ion-icon></button>}
-        <span>{title}</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {title}
+          {presence?.state === 'online' ? (
+            <span className="presence-inline online" aria-label={t('online')}></span>
+          ) : presence?.last_changed ? (
+            <span className="presence-inline offline" title={t('lastSeen', { time: timeAgo(presence.last_changed) })} aria-label={t('offline')}></span>
+          ) : null}
+        </span>
       </div>
 
       <div

@@ -3,6 +3,7 @@ import { auth, db } from './firebase';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
+import { setupPresence } from './utils/presence';
 import { useTranslation } from 'react-i18next';
 
 import Login from './components/Login';
@@ -14,6 +15,8 @@ import PostsFeed from './components/PostsFeed';
 import CreatePost from './components/CreatePost';
 import Profile from './components/Profile';
 import PostPage from './components/PostPage';
+import ResetPassword from './components/ResetPassword';
+import Discover from './components/Discover';
 import './style.css';
 
 function App() {
@@ -26,6 +29,8 @@ function App() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       if (currentUser) {
+        // Mark user online in presence system
+        try { setupPresence(currentUser.uid); } catch(_) {}
         // If using email/password and the email isn't verified, treat as signed out
         const isPasswordUser = currentUser.providerData.some(p => p.providerId === 'password');
         if (isPasswordUser && !currentUser.emailVerified) {
@@ -80,16 +85,19 @@ function App() {
     );
   }
 
+  const isAuthRoute = (!user && (location.pathname === '/' || location.pathname === '/signup' || location.pathname === '/reset')) || (!!user && !hasUsername);
 
   return (
-    <div className={`App ${location.pathname.startsWith('/messages') ? 'route-messages' : ''}`}>
-      <Header user={user} />
+    <div className={`App ${location.pathname.startsWith('/messages') ? 'route-messages' : ''} ${isAuthRoute ? 'route-auth' : ''}`}>
+      {!isAuthRoute && <Header user={user} />}
       <Routes>
         <Route path="/post/:postId" element={<PostPage currentUser={user} />} />
         <Route path="/create" element={<CreatePost currentUser={user} />} />
         <Route path="/profile/:username" element={<Profile currentUser={user} />} />
         <Route path="/messages" element={<ChatPage currentUser={user} />} />
+        <Route path="/discover" element={<Discover />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/reset" element={<ResetPassword />} />
         <Route path="/" element={
           user ? (
             hasUsername ? (
@@ -98,16 +106,10 @@ function App() {
                 <PostsFeed currentUser={user} />
               </div>
             ) : (
-              <>
-                <UsernameForm />
-                <PostsFeed currentUser={user} />
-              </>
+              <UsernameForm />
             )
           ) : (
-            <>
-              <Login />
-              <PostsFeed currentUser={user} />
-            </>
+            <Login />
           )
         } />
         <Route path="*" element={

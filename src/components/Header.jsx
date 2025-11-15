@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { db } from '../firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -56,18 +56,38 @@ const Header = ({ user }) => {
       <Link to="/" className="logo"><img src="/logo.png" alt="Logo" /></Link>
 
       <div className="header-user-info">
+        <NavLink
+          to="/discover"
+          className={({ isActive }) => `header-discover-link${isActive ? ' active' : ''}`}
+          aria-label={t('discover')}
+          title={t('discover')}
+        >
+          <ion-icon name="compass-outline"></ion-icon>
+        </NavLink>
         {isLoggedIn && (
           <>
-            <Link to="/messages" className="header-messages-link" aria-label={t('messages')}>
+            <NavLink
+              to="/messages"
+              className={({ isActive }) => `header-messages-link${isActive ? ' active' : ''}`}
+              aria-label={t('messages')}
+            >
               <ion-icon name="chatbubbles-outline"></ion-icon>
-            </Link>
-            <Link to="/create" className="header-create-link" aria-label={t('createPostTitle')} title={t('createPostTitle')}>
+            </NavLink>
+            <NavLink
+              to="/create"
+              className={({ isActive }) => `header-create-link${isActive ? ' active' : ''}`}
+              aria-label={t('createPostTitle')}
+              title={t('createPostTitle')}
+            >
               <ion-icon name="add-circle-outline"></ion-icon>
-            </Link>
+            </NavLink>
           </>
         )}
 
-        <Link to={isLoggedIn ? `/profile/${user.username}` : '/'} className="header-profile-link">
+        <NavLink
+          to={isLoggedIn ? `/profile/${user.username}` : '/'}
+          className={({ isActive }) => `header-profile-link${isActive ? ' active' : ''}`}
+        >
           {isLoggedIn ? (
             <img
               src={photoURL || '/avatar.png'}
@@ -78,7 +98,7 @@ const Header = ({ user }) => {
           ) : (
             t('login')
           )}
-        </Link>
+        </NavLink>
       </div>
 
     </header>

@@ -18,7 +18,7 @@ import {
 import timeAgo from '../utils/timeAgo';
 import { useTranslation } from 'react-i18next';
 
-const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername }) => {
+const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername, hideSkeletons = false }) => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [likedMap, setLikedMap] = useState({}); // local UI state only
@@ -130,6 +130,7 @@ const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername }) => {
 
   // 🧱 Skeleton
   if (loading) {
+    if (hideSkeletons) return null;
     return (
       <div className="feed">
         {Array.from({ length: 5 }).map((_, i) => (

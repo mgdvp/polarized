@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { rtdb, db } from '../../firebase';
 import { ref, onValue, off, update, push, serverTimestamp, set } from 'firebase/database';
@@ -22,6 +22,8 @@ const ChatPage = ({ currentUser }) => {
   const [selectedChatOtherUserName, setSelectedChatOtherUserName] = useState(null);
   const [selectedChatOther, setSelectedChatOther] = useState(null);
   const [loadingChats, setLoadingChats] = useState(true);
+  const [presenceMap, setPresenceMap] = useState({});
+  const presenceUnsubsRef = useRef([]);
 
   const uid = currentUser?.uid;
 
@@ -53,13 +55,30 @@ const ChatPage = ({ currentUser }) => {
       setConversations(arr);
       setLoadingChats(false);
 
+      // Reset old presence listeners
+      presenceUnsubsRef.current.forEach((fn) => fn());
+      presenceUnsubsRef.current = [];
+      const nextMap = {};
+      arr.forEach((c) => {
+        const pRef = ref(rtdb, `status/${c.otherUid}`);
+        const handler = onValue(pRef, (s) => {
+          setPresenceMap((prev) => ({ ...prev, [c.otherUid]: s.val() || null }));
+        });
+        presenceUnsubsRef.current.push(() => off(pRef));
+      });
+      setPresenceMap(nextMap);
+
       // if (!selectedChatId && arr.length > 0 && typeof window !== 'undefined' && window.innerWidth > 600) {
       //   setSelectedChatId(arr[0].chatId);
       //   setSelectedChatOtherUserName(arr[0].other?.displayName || arr[0].other?.username || `@${arr[0].otherUid}`);
       //   setSelectedChatOther(arr[0].other || { uid: arr[0].otherUid });
       // }
     });
-    return () => off(userChatsRef);
+    return () => {
+      off(userChatsRef);
+      presenceUnsubsRef.current.forEach((fn) => fn());
+      presenceUnsubsRef.current = [];
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uid]);
 
@@ -118,6 +137,7 @@ const ChatPage = ({ currentUser }) => {
           setSelectedChatOther(c?.other || (c ? { uid: c.otherUid } : null));
         }}
         loading={loadingChats}
+        presenceMap={presenceMap}
       />
       <div className={`chat-window ${selectedChatId ? '' : 'hidden-mobile'}`} style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
         <ChatWindow chatId={selectedChatId} uid={uid} other={selectedChatOther} title={selectedChatOtherUserName} onBack={() => setSelectedChatId(null)} />

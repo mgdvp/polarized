@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
-const ChatList = ({ conversations, selectedChatId, onSelect, loading, className }) => {
+const ChatList = ({ conversations, selectedChatId, onSelect, loading, className, presenceMap }) => {
   const { t } = useTranslation();
 
   return (
@@ -33,6 +33,11 @@ const ChatList = ({ conversations, selectedChatId, onSelect, loading, className 
             <div className="chat-list-content">
               <div className="chat-list-name">
                 {c.other?.displayName || c.other?.username || `@${c.otherUid}`}
+                {presenceMap?.[c.otherUid]?.state === 'online' ? (
+                  <span className="presence-inline online" aria-label="online" />
+                ) : presenceMap?.[c.otherUid]?.last_changed ? (
+                  <span className="presence-inline offline" aria-label="offline" />
+                ) : null}
               </div>
               <div className="chat-list-last-message">
                 {c.lastMessage?.text || ' '}

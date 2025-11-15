@@ -8,8 +8,9 @@ const AUTH_ERROR_KEYS = {
   'auth/invalid-email': 'invalidEmail',
   'auth/missing-email': 'missingEmail',
   'auth/missing-password': 'missingPassword',
-  'auth/wrong-password': 'wrongPassword',
-  'auth/user-not-found': 'userNotFound',
+  // Show a generic invalid credentials message for wrong password or unknown user
+  'auth/wrong-password': 'invalidCredential',
+  'auth/user-not-found': 'invalidCredential',
   'auth/user-disabled': 'userDisabled',
   'auth/too-many-requests': 'tooManyRequests',
   'auth/network-request-failed': 'networkRequestFailed',
@@ -26,6 +27,8 @@ const AUTH_ERROR_KEYS = {
   // Credential and account existence
   'auth/account-exists-with-different-credential': 'accountExistsWithDifferentCredential',
   'auth/credential-already-in-use': 'credentialAlreadyInUse',
+  'auth/invalid-credential': 'invalidCredential',
+  'auth/invalid-login-credentials': 'invalidCredential',
 
   // Recaptcha or timeouts
   'auth/timeout': 'timeout',

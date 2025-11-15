@@ -2,11 +2,12 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { db, auth, storage } from '../firebase';
 import { rtdb } from '../firebase';
-import { ref as dbRef, get as rtdbGet, update as rtdbUpdate, serverTimestamp } from 'firebase/database';
+import { ref as dbRef, get as rtdbGet, update as rtdbUpdate, serverTimestamp, onValue, off } from 'firebase/database';
 import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import PostsFeed from './PostsFeed';
+import PostGrid from './PostGrid';
 import { cropImageToSquare } from '../utils/imageCompressor';
 import { useTranslation } from 'react-i18next';
 
@@ -23,6 +24,7 @@ const Profile = ({ currentUser }) => {
   const fileInputRef = useRef(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [presence, setPresence] = useState(null);
 
   useEffect(() => {
     const fetchUserProfile = async () => {
@@ -56,6 +58,16 @@ const Profile = ({ currentUser }) => {
 
     fetchUserProfile();
   }, [username, currentUser]);
+
+  // Presence subscription for viewed user
+  useEffect(() => {
+    if (!userProfile?.uid) return;
+    const statusRef = dbRef(rtdb, `status/${userProfile.uid}`);
+    const unsub = onValue(statusRef, (snap) => {
+      setPresence(snap.val() || null);
+    });
+    return () => off(statusRef);
+  }, [userProfile?.uid]);
 
   // Live subscribe to viewed user's profile to get followers/following arrays and counts
   useEffect(() => {
@@ -303,7 +315,14 @@ const Profile = ({ currentUser }) => {
             <div className="profile-info">
               <div className="profile-header">
                 <div className="identity">
-                  <h1>{userProfile.displayName}</h1>
+                  <h1 style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                    {userProfile.displayName}
+                    {presence?.state === 'online' ? (
+                      <span className="presence-tag online"><span className="dot"></span>{t('online')}</span>
+                    ) : presence?.last_changed ? (
+                      <span className="presence-tag offline"><span className="dot"></span>{t('lastSeen', { time: '' })}</span>
+                    ) : null}
+                  </h1>
                   <p>@{userProfile.username}</p>
                   <div className="profile-stats">
                     <span><strong>{Array.isArray(userProfile.followers) ? userProfile.followers.length : 0}</strong> {t('followers')}</span>
@@ -352,11 +371,12 @@ const Profile = ({ currentUser }) => {
               </button>
             </div>
           )}
-          <PostsFeed
-            currentUser={currentUser}
-            filterAuthorUid={userProfile.uid}
-            filterAuthorUsername={userProfile.username}
-          />
+          <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 1rem 1rem' }}>
+            <PostGrid
+              filterAuthorUid={userProfile.uid}
+              filterAuthorUsername={userProfile.username}
+            />
+          </div>
         </>
       ) : (
         <p>{t('userNotFound')}</p>

@@ -1,5 +1,13 @@
 ## Changelog
 
+### v2.6.0-beta (2025-11-14)
+- Redesign Login and Signup (Username Form) pages.
+- Added: Discover page and default post view for profile pages is now grid view
+- Added: Search users by username on Discover page
+- Added: Password reset via email
+- Added: User online/offline status indicator
+- UI & UX improvements
+
 ### v2.5.2-beta (2025-11-11)
 - Fixed: More comments growing container height instead of enabling scroll (overflow issue)
 

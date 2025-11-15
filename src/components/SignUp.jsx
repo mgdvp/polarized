@@ -13,65 +13,34 @@ const SignUp = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [info, setInfo] = useState('');
-  const [usernameError, setUsernameError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  // Username: letters, numbers, dot and underscore. No consecutive dots, no trailing dot. Max 30.
-  const USERNAME_REGEX = /^(?!.*\.{2})(?!.*\.$)[a-zA-Z0-9._]{1,30}$/;
+  const USERNAME_REGEX = /^(?!.*\. {2})(?!.*\.$)[a-zA-Z0-9._]{1,30}$/;
 
-  const handleUsernameChange = (e) => {
-    // Accept input as-is; we'll validate with regex on submit
-    setUsername(e.target.value);
-  };
+  const handleUsernameChange = (e) => setUsername(e.target.value);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
     setError('');
     setInfo('');
-
     setLoading(true);
-    if (!displayName.trim().length || displayName.length > 30) {
-      setError(t('displayNameRequired'));
-      setLoading(false);
-      return;
-    }
-    if (!USERNAME_REGEX.test(username)) {
-      setError(t('usernameRules'));
-      setLoading(false);
-      return;
-    }
-    // Lowercase for storage and availability check
-    const usernameLower = username.toLowerCase();
-    // Check username availability now (post-validation)
+
     try {
+      if (!displayName.trim().length || displayName.length > 30) throw new Error('display');
+      if (!USERNAME_REGEX.test(username)) throw new Error('username');
+
+      const usernameLower = username.toLowerCase();
       const usersRef = collection(db, 'users');
-      const q = query(usersRef, where('username', '==', usernameLower));
-      const querySnapshot = await getDocs(q);
-      if (!querySnapshot.empty) {
-        setError(t('usernameTaken'));
-        setLoading(false);
-        return;
-      }
-    } catch (e1) {
-      console.error('Error checking username availability:', e1);
-      setError(t('usernameCheckFailed'));
-      setLoading(false);
-      return;
-    }
-    if (password.length < 6) {
-      setError(t('passwordMin'));
-      setLoading(false);
-      return;
-    }
+      const q1 = query(usersRef, where('username', '==', usernameLower));
+      const existing = await getDocs(q1);
+      if (!existing.empty) throw new Error('taken');
 
-    setInfo(t('creatingYourAccount'));
+      if (password.length < 6) throw new Error('password');
 
-    try {
       const result = await createUserWithEmailAndPassword(auth, email, password);
       const user = result.user;
-
       const userDocRef = doc(db, 'users', user.uid);
       const userData = {
         uid: user.uid,
@@ -80,70 +49,73 @@ const SignUp = () => {
         username: usernameLower,
         photoURL: `https://api.dicebear.com/9.x/initials/svg?seed=${displayName}`,
       };
-
       await setDoc(userDocRef, userData);
-      try {
-        await sendEmailVerification(user);
-        setInfo(t('verificationEmailSent', { email }));
-      } catch (e) {
-        console.error('Error sending verification email:', e);
-        setError(getAuthErrorMessage(e));
-      }
-      // Sign out until email is verified
+      try { await sendEmailVerification(user); setInfo(t('verificationEmailSent', { email })); } catch (e2) { setError(getAuthErrorMessage(e2)); }
       await signOut(auth);
-    } catch (error) {
-      console.error("Error signing up:", error);
-      setError(getAuthErrorMessage(error));
+    } catch (err) {
+      const code = err?.message;
+      if (code === 'display') setError(t('displayNameRequired'));
+      else if (code === 'username') setError(t('usernameRules'));
+      else if (code === 'taken') setError(t('usernameTaken'));
+      else if (code === 'password') setError(t('passwordMin'));
+      else setError(getAuthErrorMessage(err));
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <h2>{t('createAccount')}</h2>
-      <form onSubmit={handleSignUp} className="login-form">
-        <input
-          type="text"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value.slice(0, 30))}
-          placeholder={t('fullName')}
-          maxLength={30}
-          disabled={loading}
-          required
-        />
-        <input
-          type="text"
-          value={username}
-          onChange={handleUsernameChange}
-          placeholder={t('username')}
-          maxLength={30}
-          disabled={loading}
-          required
-        />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder={t('email')}
-          disabled={loading}
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder={t('password')}
-          disabled={loading}
-          required
-        />
-        <button type="submit" disabled={loading}>{loading ? t('creating') : t('signUp')}</button>
-      </form>
-      {info && <p className="info-message">{info}</p>}
-      {error && <p className="error-message">{error}</p>}
-      <p>
-        {t('alreadyHaveAccount')} <Link to="/">{t('signIn')}</Link>
-      </p>
+    <div className="auth-page" style={{ fontFamily: 'Plus Jakarta Sans, Inter, system-ui, sans-serif' }}>
+      <div className="auth-left">
+        <div className="auth-hero">
+          <h1>{t('connectShareDiscover')}</h1>
+          <p>{t('heroSubtitle')}</p>
+        </div>
+      </div>
+      <div className="auth-right">
+        <div className="auth-inner">
+          <div className="auth-brand">
+            <img src="/logo.png" alt="Logo" />
+            <span className="name">Polarized</span>
+          </div>
+          <h2 className="auth-title">{t('createYourAccount')}</h2>
+
+          <form onSubmit={handleSignUp} className="auth-form">
+            <label className="auth-label">{t('fullName')}</label>
+            <div className="auth-field">
+              <ion-icon name="person-outline"></ion-icon>
+              <input className="auth-input" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value.slice(0, 30))} placeholder={t('yourFullName')} maxLength={30} disabled={loading} required />
+            </div>
+
+            <label className="auth-label">{t('username')}</label>
+            <div className="auth-field">
+              <ion-icon name="at-outline"></ion-icon>
+              <input className="auth-input" type="text" value={username} onChange={handleUsernameChange} placeholder={t('chooseUsername')} maxLength={30} disabled={loading} required />
+            </div>
+
+            <label className="auth-label">{t('email')}</label>
+            <div className="auth-field">
+              <ion-icon name="mail-outline"></ion-icon>
+              <input className="auth-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('enterYourEmail')} disabled={loading} required />
+            </div>
+
+            <label className="auth-label">{t('password')}</label>
+            <div className="auth-field">
+              <ion-icon name="lock-closed-outline"></ion-icon>
+              <input className="auth-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t('createPassword')} disabled={loading} required />
+            </div>
+
+            <button type="submit" className="auth-submit" disabled={loading}>{loading ? t('creating') : t('signUp')}</button>
+          </form>
+
+          {info && <p className="info-message" style={{ marginTop: 12 }}>{info}</p>}
+          {error && <p className="error-message" style={{ marginTop: 8 }}>{error}</p>}
+
+          <p className="auth-meta" style={{ marginTop: 18 }}>
+            {t('alreadyHaveAccount')} <Link to="/">{t('signIn')}</Link>
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
