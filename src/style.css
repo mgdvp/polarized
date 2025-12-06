@@ -1,8 +1,8 @@
 /* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
 
 :root {
-  --bg-main: #181818;
-  --bg-card: #282828;
+  --bg-main: #161616;
+  --bg-card: #262626;
   --text-primary: #F0F0F0;
   --text-secondary: #A0A0A0;
   --accent-color: #FFD700;
@@ -12,7 +12,6 @@
   --primary: #25aff4;
   --primary-hover: #1e9cd6; /* slightly darker for minimal hover */
   --bg-light: #f5f7f8;
-  --bg-dark: #101c22;
   --radius: 1rem;
   --radius-lg: 1.5rem;
   --radius-xl: 2rem;
@@ -95,7 +94,7 @@ button:hover {
 /* --- Auth pages (login & signup) --- */
 .auth-page{
   min-height: 100vh;
-  background: var(--bg-dark);
+  background: var(--bg-main);
   color: #eaf2f6;
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -106,13 +105,14 @@ button:hover {
   align-items: flex-end;
   justify-content: flex-start;
   padding: 3rem;
-  background: radial-gradient(1200px 600px at -10% -20%, #1e3a8a 0%, transparent 50%),
-              radial-gradient(1000px 600px at 120% 120%, #0ea5e9 0%, transparent 40%),
-              linear-gradient(160deg, #0c1520 0%, #06202a 100%);
+  background: radial-gradient(1200px 600px at -10% -20%, #444b5f 0%, transparent 50%),
+              radial-gradient(1000px 600px at 120% 120%, #444b5f 0%, transparent 40%),
+              linear-gradient(160deg, #09101a 0%, #030f14 100%);
 }
 .auth-hero{
   max-width: 540px;
   font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
+  text-align: left;
 }
 .auth-hero h1{
   margin: 0 0 0.5rem;
@@ -124,7 +124,6 @@ button:hover {
   margin: 0;
   color: #c7d4db;
   line-height: 1.6;
-  text-align: left;
 }
 
 .auth-right{
@@ -153,7 +152,7 @@ button:hover {
   gap: 12px;
   margin-bottom: 1rem;
 }
-.auth-brand img{ height: 32px; width: 36px; object-fit: cover; object-position: left center; }
+.auth-brand img{ height: 32px; width: 38px; object-fit: cover; object-position: left center; }
 .auth-brand .name{ font-weight: 700; font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif; }
 /* Make brand text larger per request */
 .auth-brand .name{ font-size: 22px; }
@@ -167,7 +166,7 @@ button:hover {
 
 .auth-form{ display: flex; flex-direction: column; gap: 14px; width: 100%; }
 /* Left-align labels and remove extra spacing */
-.auth-label{ font-size: 13px; color: #b9c7ce; margin: 0; text-align: left; display: block; width: 100%; }
+.auth-label{ font-size: 13px; color: #b9c7ce; margin: 0; text-align: left; display: block; width: 100%; margin-bottom: -6px;}
 .auth-field{ position: relative; width: 100%; }
 .auth-field ion-icon{
   position: absolute;
@@ -181,14 +180,13 @@ button:hover {
   width: 100%;
   height: 52px;
   border-radius: var(--radius-full);
-  border: 1px solid #20323b;
-  background: #0b141a;
+  background: var(--bg-card);
   color: #eaf2f6;
   padding: 0 16px 0 44px;
   font-family: "Plus Jakarta Sans", Inter, system-ui, sans-serif;
 }
 .auth-input::placeholder{ color: #7f97a2; }
-.auth-input:focus{ outline: 2px solid #1b2b33; border-color: #315464; }
+.auth-input:focus{ outline: 2px solid var(--bg-card);  outline-offset: 2px;}
 
 .auth-row{ display: flex; align-items: center; justify-content: space-between; }
 .auth-forgot{ font-size: 13px; color: #6fb9da; }
@@ -245,79 +243,6 @@ button:hover {
   .auth-page{ grid-template-columns: 1fr; }
   .auth-left{ display: none; }
   .auth-right{ padding: 1.5rem; }
-}
-/* @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap'); */
-
-:root {
-  --bg-main: #181818;
-  --bg-card: #282828;
-  --text-primary: #F0F0F0;
-  --text-secondary: #A0A0A0;
-  --accent-color: #FFD700;
-  --border-color: #444444;
-
-  /* Auth theme tokens */
-  --primary: #25aff4;
-  --bg-light: #f5f7f8;
-  --bg-dark: #101c22;
-  --radius: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  --radius-full: 9999px;
-
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: dark;
-  color: var(--text-primary);
-  background-color: var(--bg-main);
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  -webkit-text-size-adjust: 100%;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-#root {
-  width: 100%;
-}
-
-.App {
-  padding: 1rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-button {
-  border-radius: 20px;
-  border: 1px solid var(--border-color);
-  padding: 0.5em 1em;
-  font-size: 0.9em;
-  font-weight: 500;
-  font-family: inherit;
-  background: var(--bg-card);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
-}
-button:hover {
-  background: #3a3a3a;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-  opacity: 0.9;
 }
 
 .app-header {

@@ -365,7 +365,7 @@ const Profile = ({ currentUser }) => {
           {isCurrentUser && (
             <div style={{ maxWidth: 720, margin: '1rem auto' }}>
               <button style={{ width: '100%', maxWidth: '300px' }}>
-                <Link to="/create" style={{ display: 'inline-block' }}>
+                <Link to="/create" style={{ display: 'inline-block', width: '100%', padding: '0.5rem 1rem' }}>
                   {t('createPostTitle')}
                 </Link>
               </button>

@@ -81,28 +81,28 @@ const SignUp = () => {
           <h2 className="auth-title">{t('createYourAccount')}</h2>
 
           <form onSubmit={handleSignUp} className="auth-form">
-            <label className="auth-label">{t('fullName')}</label>
+            <label htmlFor="displayName-input" className="auth-label">{t('fullName')}</label>
             <div className="auth-field">
               <ion-icon name="person-outline"></ion-icon>
-              <input className="auth-input" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value.slice(0, 30))} placeholder={t('yourFullName')} maxLength={30} disabled={loading} required />
+              <input id="displayName-input" className="auth-input" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value.slice(0, 30))} placeholder={t('yourFullName')} maxLength={30} disabled={loading} required />
             </div>
 
-            <label className="auth-label">{t('username')}</label>
+            <label htmlFor="username-input" className="auth-label">{t('username')}</label>
             <div className="auth-field">
               <ion-icon name="at-outline"></ion-icon>
-              <input className="auth-input" type="text" value={username} onChange={handleUsernameChange} placeholder={t('chooseUsername')} maxLength={30} disabled={loading} required />
+              <input id="username-input" className="auth-input" type="text" value={username} onChange={handleUsernameChange} placeholder={t('chooseUsername')} maxLength={30} disabled={loading} required />
             </div>
 
-            <label className="auth-label">{t('email')}</label>
+            <label htmlFor="email-input" className="auth-label">{t('email')}</label>
             <div className="auth-field">
               <ion-icon name="mail-outline"></ion-icon>
-              <input className="auth-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('enterYourEmail')} disabled={loading} required />
+              <input id="email-input" className="auth-input" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t('enterYourEmail')} disabled={loading} required />
             </div>
 
-            <label className="auth-label">{t('password')}</label>
+            <label htmlFor="password-input" className="auth-label">{t('password')}</label>
             <div className="auth-field">
               <ion-icon name="lock-closed-outline"></ion-icon>
-              <input className="auth-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t('createPassword')} disabled={loading} required />
+              <input id="password-input" className="auth-input" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t('createPassword')} disabled={loading} required />
             </div>
 
             <button type="submit" className="auth-submit" disabled={loading}>{loading ? t('creating') : t('signUp')}</button>

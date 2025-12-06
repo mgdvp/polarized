@@ -8,9 +8,16 @@
 ---
 
 ## 🚀 Overview
-**Polarized** is a lightweight social app where users can share image posts, like content, and manage their profiles — powered by Firebase.  
-Built with **Vite**, **React**, and **Firebase (Auth, Firestore, Storage)** for speed and simplicity.
+**Polarized** is a lightweight social app where users can share image posts, like content, comment on posts, and manage their profiles, follow other users — powered by Firebase. It also features a real-time one-on-one chat system, allowing users to communicate seamlessly.
+Built with **Vite**, **React**, **React Router** and **Firebase (Auth, Firestore, Storage, Realtime Database)**
 
+Uses both **Cloud Firestore** (for posts, users, likes) and **Realtime Database** (for chat messages) to leverage the strengths of each database service.
+
+**Firebase Authentication** for secure user sign-up, login, and session management.
+
+**Firebase Storage** for efficient image upload and retrieval.
+
+**i18next** for internationalization, currently supporting English, Turkish, and Azerbaijani languages.
 ---
 
 ## Updates
@@ -80,8 +87,11 @@ Further updates and changelogs can be found in the [changelog.md](changelog.md) 
 ---
 
 ## 🧰 Tech Stack
-- **Frontend:** React + React Router + Vite + Ionicons
+- **Frontend:** React, React Router
 - **Backend:** Firebase v9 (Auth, Firestore, Storage, Realtime Database)
+- **Iconography:** Ionicons
+- **Build Tool:** Vite
+- **Internationalization:** i18next
 
 ---
 

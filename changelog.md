@@ -1,5 +1,10 @@
 ## Changelog
 
+### v2.6.1-beta (2025-12-06)
+ - Dependency updates (see: CVE-2025-5518)
+ - UI & UX improvements
+ - Bug fixes & optimizations
+
 ### v2.6.0-beta (2025-11-15)
 - Redesign Login and Signup (Username Form) pages.
 - Added: Discover page and default post view for profile pages is now grid view

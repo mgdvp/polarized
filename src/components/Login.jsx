@@ -85,7 +85,7 @@ const Login = () => {
           <h2 className="auth-title">{t('welcomeBack')}</h2>
 
           <form onSubmit={handleEmailSignIn} className="auth-form">
-            <label className="auth-label">{t('email')}</label>
+            <label htmlFor="email-input" className="auth-label">{t('email')}</label>
             <div className="auth-field">
               <ion-icon name="mail-outline" aria-hidden="true"></ion-icon>
               <input
@@ -95,10 +95,11 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder={t('enterYourEmail')}
                 required
+                id='email-input'
               />
             </div>
 
-            <label className="auth-label">{t('password')}</label>
+            <label htmlFor="password-input" className="auth-label">{t('password')}</label>
             <div className="auth-field">
               <ion-icon name="lock-closed-outline" aria-hidden="true"></ion-icon>
               <input
@@ -109,6 +110,7 @@ const Login = () => {
                 placeholder={t('enterPassword')}
                 required
                 minLength={6}
+                id='password-input'
               />
             </div>
 
