@@ -22,9 +22,9 @@ const MessageBubble = React.memo(({ m, uid, other, title, GAP, formatDate, forma
         {!fromMe && showAvatar && (
           <img
             className="chat-msg-avatar"
-            src={other?.photoURL || '/avatar.png'}
+            src={other?.photoURL || '/default-avatar.png'}
             alt={title || 'User'}
-            onError={(e) => { e.currentTarget.src = '/avatar.png'; }}
+            onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default-avatar.png'; }}
           />
         )}
 

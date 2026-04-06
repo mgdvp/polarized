@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { db, auth, storage } from '../firebase';
+import { db, auth } from '../firebase';
 import { rtdb } from '../firebase';
 import { ref as dbRef, get as rtdbGet, update as rtdbUpdate, serverTimestamp, onValue, off } from 'firebase/database';
 import { collection, query, where, getDocs, doc, updateDoc, onSnapshot, writeBatch, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { signOut, updateProfile as updateAuthProfile } from 'firebase/auth';
-import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import PostsFeed from './PostsFeed';
 import PostGrid from './PostGrid';
 import { cropImageToSquare } from '../utils/imageCompressor';
+import { uploadImageToCloudinary } from '../utils/cloudinary';
 import { useTranslation } from 'react-i18next';
 
 const Profile = ({ currentUser }) => {
@@ -140,10 +140,7 @@ const Profile = ({ currentUser }) => {
       setUploading(true);
       // Crop/resize to square thumbnail
       const blob = await cropImageToSquare(file);
-      const path = `avatars/${userProfile.uid}/${Date.now()}_${file.name}`;
-      const sRef = storageRef(storage, path);
-      await uploadBytes(sRef, blob);
-      const url = await getDownloadURL(sRef);
+      const url = await uploadImageToCloudinary(blob);
 
       // Update Firestore user doc
       const userRef = doc(db, 'users', userProfile.uid);
@@ -165,7 +162,15 @@ const Profile = ({ currentUser }) => {
       setUserProfile((prev) => ({ ...prev, photoURL: url }));
     } catch (err) {
       console.error('Failed to upload avatar:', err);
-      alert(t('couldNotUploadImage'));
+      if (err.message === 'NSFW content') {
+        alert(t('nsfwNotAllowed'));
+      } else if (err.message === 'Failed to get upload signature') {
+        alert(t('uploadSignatureFailed'));
+      } else if (err.message === 'Moderation check failed') {
+        alert(t('moderationFailed'));
+      } else {
+        alert(t('couldNotUploadImage'));
+      }
     } finally {
       setUploading(false);
       // clear file input value so same file can be picked again
@@ -289,7 +294,13 @@ const Profile = ({ currentUser }) => {
         <>
           <div className="profile-card" id="profile-card">
           <div className={`profile-picture-wrapper${isCurrentUser ? ' editable' : ''}${uploading ? ' uploading' : ''}`}>
-            <img src={userProfile.photoURL} alt={userProfile.displayName} className="profile-picture" onClick={triggerPhotoPicker} />
+            <img 
+              src={userProfile.photoURL || '/default-avatar.png'} 
+              alt={userProfile.displayName} 
+              className="profile-picture" 
+              onClick={triggerPhotoPicker} 
+              onError={(e) => { e.target.onerror = null; e.target.src = '/default-avatar.png'; }} 
+            />
               {isCurrentUser && (
                   <>
                     <button

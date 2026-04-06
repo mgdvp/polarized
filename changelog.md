@@ -1,5 +1,10 @@
 ## Changelog
 
+### v3.0.0-beta (2026-04-06)
+- Post uploading feature now uses Cloudflare Workers for secure, signed upload URLs, replacing the previous direct Firebase Storage upload method. The project is no longer using firebase storage anymore.
+- Added: Image moderation using third-party API. Uploaded images are now automatically checked for NSFW content, and uploads that fail moderation are rejected with an appropriate error message.
+- Fixed: Unlimited requests to server when profile image fails to load due to onError listener bug.
+
 ### v2.6.1-beta (2025-12-06)
  - Dependency updates (see: CVE-2025-5518)
  - UI & UX improvements

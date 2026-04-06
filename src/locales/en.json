@@ -100,7 +100,7 @@
   "noUsersFound": "No users found.",
   "loading": "Loading…",
   "auth": {
-  "invalidCredential": "No account was found matching the information you entered. Please check your details or try resetting your password.",
+    "invalidCredential": "No account was found matching the information you entered. Please check your details or try resetting your password.",
     "invalidEmail": "Please enter a valid email address.",
     "missingEmail": "Please enter your email address.",
     "missingPassword": "Please enter your password.",
@@ -124,15 +124,46 @@
     "justNow": "just now",
     "ago": "ago",
     "units": {
-      "year": { "one": "year", "other": "years", "short": "y" },
-      "month": { "one": "month", "other": "months", "short": "mo" },
-      "week": { "one": "week", "other": "weeks", "short": "w" },
-      "day": { "one": "day", "other": "days", "short": "d" },
-      "hour": { "one": "hour", "other": "hours", "short": "h" },
-      "minute": { "one": "minute", "other": "minutes", "short": "m" },
-      "second": { "one": "second", "other": "seconds", "short": "s" }
+      "year": {
+        "one": "year",
+        "other": "years",
+        "short": "y"
+      },
+      "month": {
+        "one": "month",
+        "other": "months",
+        "short": "mo"
+      },
+      "week": {
+        "one": "week",
+        "other": "weeks",
+        "short": "w"
+      },
+      "day": {
+        "one": "day",
+        "other": "days",
+        "short": "d"
+      },
+      "hour": {
+        "one": "hour",
+        "other": "hours",
+        "short": "h"
+      },
+      "minute": {
+        "one": "minute",
+        "other": "minutes",
+        "short": "m"
+      },
+      "second": {
+        "one": "second",
+        "other": "seconds",
+        "short": "s"
+      }
     },
     "yesterday": "yesterday",
     "today": "today"
-  }
+  },
+  "nsfwNotAllowed": "NSFW content is not allowed.",
+  "uploadSignatureFailed": "Failed to get upload signature. Please try again.",
+  "moderationFailed": "Moderation check failed. Please try again."
 }

@@ -1,8 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { db, storage } from '../firebase';
+import { db } from '../firebase';
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { compressImage } from '../utils/imageCompressor';
+import { uploadImageToCloudinary } from '../utils/cloudinary';
 import { useTranslation } from 'react-i18next';
 
 // Expected data shape in Firestore /posts
@@ -53,11 +53,7 @@ const CreatePost = ({ currentUser }) => {
     try {
       setUploading(true);
       const blob = await compressImage(f, 1080, 0.85);
-      const ext = 'webp';
-      const storagePath = `posts/${currentUser.uid}/${Date.now()}.${ext}`;
-      const storageRef = ref(storage, storagePath);
-      await uploadBytes(storageRef, blob, { contentType: 'image/webp' });
-      const url = await getDownloadURL(storageRef);
+      const url = await uploadImageToCloudinary(blob);
       // Drop result if a new upload started since
       if (uploadTokenRef.current === myToken) {
         setImageUrl(url);
@@ -65,7 +61,15 @@ const CreatePost = ({ currentUser }) => {
     } catch (err) {
       console.error('Image upload failed:', err);
       if (uploadTokenRef.current === myToken) {
-        setError(t('imageUploadFailed'));
+        if (err.message === 'NSFW content') {
+          setError(t('nsfwNotAllowed'));
+        } else if (err.message === 'Failed to get upload signature') {
+          setError(t('uploadSignatureFailed'));
+        } else if (err.message === 'Moderation check failed') {
+          setError(t('moderationFailed'));
+        } else {
+          setError(t('imageUploadFailed'));
+        }
         setImageUrl('');
       }
     } finally {

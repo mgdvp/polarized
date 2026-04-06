@@ -99,7 +99,7 @@
   "noUsersFound": "Kullanıcı bulunamadı.",
   "loading": "Yükleniyor…",
   "auth": {
-  "invalidCredential": "Girdiğiniz bilgilerle eşleşen bir hesap bulunamadı. Lütfen bilgilerinizi kontrol edin veya şifrenizi sıfırlamayı deneyin.",
+    "invalidCredential": "Girdiğiniz bilgilerle eşleşen bir hesap bulunamadı. Lütfen bilgilerinizi kontrol edin veya şifrenizi sıfırlamayı deneyin.",
     "invalidEmail": "Lütfen geçerli bir e‑posta adresi girin.",
     "missingEmail": "Lütfen e‑posta adresinizi girin.",
     "missingPassword": "Lütfen şifrenizi girin.",
@@ -123,15 +123,46 @@
     "justNow": "az önce",
     "ago": "önce",
     "units": {
-      "year": { "one": "yıl", "other": "yıl", "short": "y" },
-      "month": { "one": "ay", "other": "ay", "short": "ay" },
-      "week": { "one": "hafta", "other": "hafta", "short": "h" },
-      "day": { "one": "gün", "other": "gün", "short": "g" },
-      "hour": { "one": "saat", "other": "saat", "short": "s" },
-      "minute": { "one": "dakika", "other": "dakika", "short": "dk" },
-      "second": { "one": "saniye", "other": "saniye", "short": "sn" }
+      "year": {
+        "one": "yıl",
+        "other": "yıl",
+        "short": "y"
+      },
+      "month": {
+        "one": "ay",
+        "other": "ay",
+        "short": "ay"
+      },
+      "week": {
+        "one": "hafta",
+        "other": "hafta",
+        "short": "h"
+      },
+      "day": {
+        "one": "gün",
+        "other": "gün",
+        "short": "g"
+      },
+      "hour": {
+        "one": "saat",
+        "other": "saat",
+        "short": "s"
+      },
+      "minute": {
+        "one": "dakika",
+        "other": "dakika",
+        "short": "dk"
+      },
+      "second": {
+        "one": "saniye",
+        "other": "saniye",
+        "short": "sn"
+      }
     },
     "yesterday": "dün",
     "today": "bugün"
-  }
+  },
+  "nsfwNotAllowed": "Uygunsuz (NSFW) içeriğe izin verilmiyor.",
+  "uploadSignatureFailed": "Yükleme imzası alınamadı. Lütfen tekrar deneyin.",
+  "moderationFailed": "Moderasyon kontrolü başarısız oldu. Lütfen tekrar deneyin."
 }

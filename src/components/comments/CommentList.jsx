@@ -53,7 +53,7 @@ const CommentList = ({ postId, refreshToken }) => {
     <div className="comments-list">
       {comments.map((c) => (
         <div className="comment" key={c.id}>
-          <img className="comment-pp" src={c.authorPp || '/default-avatar.png'} alt={c.authorUsername || 'user'} onError={(e) => { e.currentTarget.src = '/default-avatar.png'; }} />
+          <img className="comment-pp" src={c.authorPp || '/default-avatar.png'} alt={c.authorUsername || 'user'} onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default-avatar.png'; }} />
           <div className="comment-body">
             <div className="comment-meta">
               <div className="comment-author-line">

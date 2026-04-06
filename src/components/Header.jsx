@@ -10,14 +10,14 @@ const Header = ({ user }) => {
 
   // optimistic photo URL: prefer prop, then localStorage, then placeholder
   const initialLocal = typeof window !== 'undefined' ? localStorage.getItem('photoURL') : null;
-  const [photoURL, setPhotoURL] = useState(user?.photoURL || initialLocal || '/avatar.png');
+  const [photoURL, setPhotoURL] = useState(user?.photoURL || initialLocal || '/default-avatar.png');
 
   // keep localStorage in sync and perform an optimistic update: fetch authoritative URL from Firestore
   useEffect(() => {
     let mounted = true;
     if (!user?.uid) {
       // no user -> clear optimistic cached photo
-      setPhotoURL('/avatar.png');
+      setPhotoURL('/default-avatar.png');
       try { localStorage.removeItem('photoURL'); } catch (e) {}
       return;
     }
@@ -90,10 +90,10 @@ const Header = ({ user }) => {
         >
           {isLoggedIn ? (
             <img
-              src={photoURL || '/avatar.png'}
+              src={photoURL || '/default-avatar.png'}
               alt={user.displayName || user.username || 'Profile'}
               className="header-user-pp"
-              onError={(e) => { e.currentTarget.src = '/avatar.png'; }}
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default-avatar.png'; }}
             />
           ) : (
             t('login')

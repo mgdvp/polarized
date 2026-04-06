@@ -166,6 +166,7 @@ const PostsFeed = ({ currentUser, filterAuthorUid, filterAuthorUsername, hideSke
               className="post-author-pp"
               src={post.authorPp || '/default-avatar.png'}
               alt={post.author || 'user'}
+              onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = '/default-avatar.png'; }}
             />
             <div className="post-author">
               <Link to={`/profile/${post.author}`} className="name">

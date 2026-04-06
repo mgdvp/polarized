@@ -26,7 +26,7 @@ const ChatList = ({ conversations, selectedChatId, onSelect, loading, className,
             onClick={() => onSelect(c.chatId)}
           >
             <img
-              src={c.other?.photoURL || '/avatar.png'}
+              src={c.other?.photoURL || '/default-avatar.png'}
               alt={c.other?.displayName || c.other?.username || c.otherUid}
               className="chat-list-avatar"
             />

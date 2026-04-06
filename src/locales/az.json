@@ -46,6 +46,7 @@
   "displayNameTooLong": "Görünən ad ən çox 30 simvol olmalıdır.",
   "couldNotUpdateName": "Ad yenilənə bilmədi. Zəhmət olmasa daha sonra yenidən cəhd edin.",
   "selectImageFile": "Zəhmət olmasa bir şəkil faylı seçin.",
+  "selectPhoto" : "Şəkil seç",
   "uploading": "Yüklənir…",
   "changeProfilePhoto": "Profil şəklini dəyişdir",
   "couldNotUpdatePhoto": "Profil şəkli yenilənə bilmədi. Zəhmət olmasa daha sonra yenidən cəhd edin.",
@@ -99,7 +100,7 @@
   "noUsersFound": "İstifadəçi tapılmadı.",
   "loading": "Yüklənir…",
   "auth": {
-  "invalidCredential": "Daxil etdiyiniz məlumatlara uyğun hesab tapılmadı. Zəhmət olmasa məlumatlarınızı yoxlayın və ya şifrənizi sıfırlamağa cəhd edin.",
+    "invalidCredential": "Daxil etdiyiniz məlumatlara uyğun hesab tapılmadı. Zəhmət olmasa məlumatlarınızı yoxlayın və ya şifrənizi sıfırlamağa cəhd edin.",
     "invalidEmail": "Düzgün e‑poçt ünvanı daxil edin.",
     "missingEmail": "Zəhmət olmasa e‑poçt ünvanınızı daxil edin.",
     "missingPassword": "Zəhmət olmasa şifrənizi daxil edin.",
@@ -123,15 +124,46 @@
     "justNow": "indi",
     "ago": "əvvəl",
     "units": {
-      "year": { "one": "il", "other": "il", "short": "il" },
-      "month": { "one": "ay", "other": "ay", "short": "ay" },
-      "week": { "one": "həftə", "other": "həftə", "short": "həf" },
-      "day": { "one": "gün", "other": "gün", "short": "g" },
-      "hour": { "one": "saat", "other": "saat", "short": "s" },
-      "minute": { "one": "dəqiqə", "other": "dəqiqə", "short": "dəq" },
-      "second": { "one": "saniyə", "other": "saniyə", "short": "san" }
+      "year": {
+        "one": "il",
+        "other": "il",
+        "short": "il"
+      },
+      "month": {
+        "one": "ay",
+        "other": "ay",
+        "short": "ay"
+      },
+      "week": {
+        "one": "həftə",
+        "other": "həftə",
+        "short": "həf"
+      },
+      "day": {
+        "one": "gün",
+        "other": "gün",
+        "short": "g"
+      },
+      "hour": {
+        "one": "saat",
+        "other": "saat",
+        "short": "s"
+      },
+      "minute": {
+        "one": "dəqiqə",
+        "other": "dəqiqə",
+        "short": "dəq"
+      },
+      "second": {
+        "one": "saniyə",
+        "other": "saniyə",
+        "short": "san"
+      }
     },
     "yesterday": "dünən",
     "today": "bu gün"
-  }
+  },
+  "nsfwNotAllowed": "Uyğunsuz (NSFW) məzmuna icazə verilmir.",
+  "uploadSignatureFailed": "Yükləmə imzası alınmadı. Xaiş olunur yenidən cəhd edin.",
+  "moderationFailed": "Moderasiya yoxlanışı uğursuz oldu. Xaiş olunur yenidən cəhd edin."
 }
