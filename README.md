@@ -61,9 +61,10 @@ Further updates and changelogs can be found in the [changelog.md](changelog.md) 
 - Form validation
 
 ### 🖼️ Posts
-- Create posts with **image + caption** 
+- Create posts with **image + caption**
 - Image compression before upload
-- Uploads stored in Firebase Storage
+- Uploads stored in Cloudinary (previously Firebase Storage)
+- Image moderation using third-party API
 - Live, responsive grid feed
 - User-specific posts
 - Like/unlike posts (with optimistic UI updates)
